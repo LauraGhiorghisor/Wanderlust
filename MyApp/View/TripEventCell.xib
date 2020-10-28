@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="104" id="KGk-i7-Jjw" customClass="TripEventCell" customModule="MyApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="353" height="104"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="353" height="104"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="d7f-8u-635">
+                        <rect key="frame" x="20" y="5" width="270" height="89"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exotic Museum of Wonders" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aT0-Ai-hSA">
+                                <rect key="frame" x="0.0" y="0.0" width="270" height="23"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="23" id="nJC-fu-qKP"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" name="BrandTeal"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23 Highway Road" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="39i-6P-vq7">
+                                <rect key="frame" x="0.0" y="33" width="270" height="23"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="23" id="m8h-Bi-LE1"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="London, UK" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oI6-5w-nJz">
+                                <rect key="frame" x="0.0" y="66" width="270" height="23"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="23" id="geN-ge-kRQ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="oI6-5w-nJz" secondAttribute="bottom" id="8ng-0c-aBc"/>
+                            <constraint firstItem="aT0-Ai-hSA" firstAttribute="centerX" secondItem="d7f-8u-635" secondAttribute="centerX" id="Hnm-JJ-CAW"/>
+                            <constraint firstItem="aT0-Ai-hSA" firstAttribute="top" secondItem="d7f-8u-635" secondAttribute="top" id="IgN-ej-mmf"/>
+                            <constraint firstItem="oI6-5w-nJz" firstAttribute="leading" secondItem="d7f-8u-635" secondAttribute="leading" id="Mey-Ca-yhk"/>
+                            <constraint firstAttribute="trailing" secondItem="aT0-Ai-hSA" secondAttribute="trailing" id="V7a-4d-pw7"/>
+                            <constraint firstItem="39i-6P-vq7" firstAttribute="leading" secondItem="d7f-8u-635" secondAttribute="leading" id="VVw-ig-xyC"/>
+                            <constraint firstAttribute="trailing" secondItem="39i-6P-vq7" secondAttribute="trailing" id="dHd-jp-aPm"/>
+                            <constraint firstAttribute="trailing" secondItem="oI6-5w-nJz" secondAttribute="trailing" id="hjR-78-2m7"/>
+                            <constraint firstItem="aT0-Ai-hSA" firstAttribute="leading" secondItem="d7f-8u-635" secondAttribute="leading" id="mJE-WN-KUb"/>
+                            <constraint firstItem="39i-6P-vq7" firstAttribute="top" secondItem="aT0-Ai-hSA" secondAttribute="bottom" constant="10" id="nwR-iB-lRo"/>
+                            <constraint firstItem="oI6-5w-nJz" firstAttribute="top" secondItem="39i-6P-vq7" secondAttribute="bottom" constant="10" id="wMb-wh-xZf"/>
+                        </constraints>
+                    </stackView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K4Y-if-Vv0">
+                        <rect key="frame" x="310" y="5" width="33" height="33"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="33" id="2sH-UR-3vQ"/>
+                            <constraint firstAttribute="height" constant="33" id="6PE-F8-fqg"/>
+                        </constraints>
+                        <color key="tintColor" systemColor="systemYellowColor"/>
+                        <state key="normal" title="Button">
+                            <imageReference key="image" image="pencil.circle.fill" catalog="system" symbolScale="large"/>
+                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="30" scale="large"/>
+                        </state>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="d7f-8u-635" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="2lM-pk-wKt"/>
+                    <constraint firstAttribute="bottom" secondItem="d7f-8u-635" secondAttribute="bottom" constant="5" id="AE0-jZ-9zF"/>
+                    <constraint firstItem="d7f-8u-635" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="KIC-9f-RwI"/>
+                    <constraint firstItem="K4Y-if-Vv0" firstAttribute="leading" secondItem="d7f-8u-635" secondAttribute="trailing" constant="20" id="KzY-zW-mSt"/>
+                    <constraint firstItem="K4Y-if-Vv0" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="MEk-5s-8ex"/>
+                    <constraint firstItem="K4Y-if-Vv0" firstAttribute="leading" secondItem="d7f-8u-635" secondAttribute="trailing" constant="20" id="ctc-mw-duy"/>
+                    <constraint firstAttribute="trailing" secondItem="K4Y-if-Vv0" secondAttribute="trailing" constant="10" id="hXa-cG-SI1"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="line1Label" destination="39i-6P-vq7" id="oND-Sd-AFs"/>
+                <outlet property="line23Label" destination="oI6-5w-nJz" id="LXw-JF-RwT"/>
+                <outlet property="titleLabel" destination="aT0-Ai-hSA" id="skY-Pe-yiX"/>
+            </connections>
+            <point key="canvasLocation" x="32.608695652173914" y="112.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="pencil.circle.fill" catalog="system" width="128" height="121"/>
+        <namedColor name="BrandTeal">
+            <color red="0.21568627450980393" green="0.70588235294117652" blue="0.69411764705882351" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
