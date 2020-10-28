@@ -91,3 +91,5 @@ iOSInjectionProject/
 
 GoogleService-Info.plist
 .DS_Store
+ssl_key_share.cc.grpc_back
+FIROptions.h
