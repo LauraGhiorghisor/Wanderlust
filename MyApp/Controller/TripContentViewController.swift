@@ -22,8 +22,9 @@ class TripContentViewController: UIViewController {
     // use array to store tf values???????????????????????????????
     var selectedTrip: String? {
         // set to nil for new trip?
-        
+       
         didSet {
+            print("i am in content setting trip")
             read()
         }
     }
@@ -38,7 +39,8 @@ class TripContentViewController: UIViewController {
         if let destinationVC = segue.destination as? TripLocationViewController {
             
             destinationVC.test =  TripContentAddLocationCell.valueForSegue
-        } else if let destinationVC = segue.destination as? TripEventsListViewController {
+        } else if let destinationVC = segue.destination as? TripVotedViewController {
+            print("i am called before segue")
             destinationVC.selectedTrip = selectedTrip!
         }
     }
@@ -245,8 +247,8 @@ class TripContentViewController: UIViewController {
                         }
                     }
                 }
-                self.sections.append(TripSection(sectionTitle: "Events", open: true, cellData: []))
-                self.sections.append(TripSection(sectionTitle: "Accommodation", open: true, cellData: []))
+//                self.sections.append(TripSection(sectionTitle: "Trip Theme", open: true, cellData: []))
+//                self.sections.append(TripSection(sectionTitle: "Accommodation", open: true, cellData: []))
                 self.sections.append(TripSection(sectionTitle: "Notes", open: true, cellData: []))
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
@@ -255,7 +257,7 @@ class TripContentViewController: UIViewController {
     }
     
     @IBAction func calculate(_ sender: UIButton) {
-        
+        performSegue(withIdentifier: K.openToVoted, sender: sender)
     }
 }
 //MARK: - Table view data source
@@ -444,7 +446,7 @@ extension TripContentViewController: UITableViewDataSource {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "AddReusableCell", for: indexPath) as! TripContentAddCell
             // must make the text differrent per section, also add buttons.
-            cell.addTF.text = "Go to Events"
+            cell.addTF.text = "Go to Notes"
             cell.addTF.isEnabled = false
             cell.goButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
             cell.goButton.isHidden = false
@@ -452,6 +454,8 @@ extension TripContentViewController: UITableViewDataSource {
             return cell
             
         }
+        
+        // NOT NEEDED ANYMORE
         if indexPath.section == 5 {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "AddReusableCell", for: indexPath) as! TripContentAddCell

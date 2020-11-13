@@ -28,8 +28,8 @@ struct K {
     static let tripToCompletedTrip =  "TripToCompletedTrip"
     static let eventsToNewEvent = "EventsToNewEvent"
     static let startToNewTrip = "StartToNewTrip"
-    
-    
+    static let openToVoted = "OpenToVoted"
+    static let votedToEvents = "VotedToEvents"
     // new trip
     static let newTripToTripContent = "NewTripToTripContent"
     

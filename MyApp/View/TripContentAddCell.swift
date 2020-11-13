@@ -45,6 +45,7 @@ class TripContentAddCell: UITableViewCell {
     
     // this will update all cells. 
     @IBAction func goButtonTapped(_ sender: UIButton) {
+        
         sender.viewContainingController()?.performSegue(withIdentifier: K.tripContentToEvents, sender: self)
     }
 }

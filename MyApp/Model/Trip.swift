@@ -16,12 +16,15 @@ class Trip {
     var title: String
     var bgImage: UIImage
     var color: UIColor
+    var status: String
     
-    init(id: String, title: String, bgImage: UIImage, color: UIColor) {
+    init(id: String, title: String, bgImage: UIImage, color: UIColor, status: String) {
         self.id = id
         self.title = title
         self.bgImage = bgImage
         self.color = color
+        self.status = status
+        
     }
     
 //    static func fetchTrips() -> [Trip] {
