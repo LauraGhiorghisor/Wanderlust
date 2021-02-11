@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,8 +18,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kUt-TS-8xT">
-                        <rect key="frame" x="40" y="13" width="245" height="18.5"/>
+                    <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kUt-TS-8xT">
+                        <rect key="frame" x="30" y="0.0" width="4" height="44"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
@@ -32,39 +33,40 @@
                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large"/>
                         </state>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x2T-g4-WOg">
-                        <rect key="frame" x="290" y="6" width="30" height="32"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="32" id="M6V-pW-ywP"/>
-                            <constraint firstAttribute="width" constant="30" id="vi3-Gh-Dsz"/>
-                        </constraints>
-                        <color key="tintColor" red="1" green="0.57810515169999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <state key="normal" image="chevron.right" catalog="system">
-                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20"/>
-                        </state>
-                    </button>
+                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="compact" translatesAutoresizingMaskIntoConstraints="NO" id="XmV-k4-3sx">
+                        <rect key="frame" x="35" y="0.0" width="285" height="44"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" name="BrandBrightOrange"/>
+                    </datePicker>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="kUt-TS-8xT" firstAttribute="leading" secondItem="vUk-on-OVU" secondAttribute="trailing" constant="10" id="0F9-WH-o0U"/>
+                    <constraint firstItem="kUt-TS-8xT" firstAttribute="leading" secondItem="vUk-on-OVU" secondAttribute="trailing" id="0F9-WH-o0U"/>
                     <constraint firstItem="kUt-TS-8xT" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="2F6-qS-Itc"/>
                     <constraint firstItem="vUk-on-OVU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="48O-h9-SVu"/>
-                    <constraint firstAttribute="trailing" secondItem="x2T-g4-WOg" secondAttribute="trailing" id="6zv-c1-X4k"/>
-                    <constraint firstItem="x2T-g4-WOg" firstAttribute="leading" secondItem="kUt-TS-8xT" secondAttribute="trailing" constant="5" id="NDp-0R-dye"/>
+                    <constraint firstItem="kUt-TS-8xT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="71k-qm-cN7"/>
+                    <constraint firstAttribute="bottom" secondItem="kUt-TS-8xT" secondAttribute="bottom" id="75F-Bl-QpC"/>
+                    <constraint firstItem="XmV-k4-3sx" firstAttribute="leading" secondItem="vUk-on-OVU" secondAttribute="trailing" constant="5" id="7Kc-w9-zrJ"/>
+                    <constraint firstItem="kUt-TS-8xT" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="8HX-uP-cEL"/>
+                    <constraint firstAttribute="trailing" secondItem="XmV-k4-3sx" secondAttribute="trailing" id="9ej-5U-B3T"/>
+                    <constraint firstItem="XmV-k4-3sx" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="H6I-Lc-29o"/>
+                    <constraint firstItem="XmV-k4-3sx" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="L7h-VH-SQj"/>
                     <constraint firstItem="vUk-on-OVU" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="VZ3-qS-qgk"/>
-                    <constraint firstItem="x2T-g4-WOg" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="uaG-DG-vIY"/>
+                    <constraint firstAttribute="bottom" secondItem="XmV-k4-3sx" secondAttribute="bottom" id="u2K-ax-rnU"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="addButton" destination="vUk-on-OVU" id="H6z-g6-NMn"/>
                 <outlet property="addTF" destination="kUt-TS-8xT" id="MCe-vt-YPR"/>
-                <outlet property="goButton" destination="x2T-g4-WOg" id="Acs-iX-igK"/>
+                <outlet property="datePicker" destination="XmV-k4-3sx" id="tqb-Ih-ZCV"/>
             </connections>
-            <point key="canvasLocation" x="139" y="101"/>
+            <point key="canvasLocation" x="137.68115942028987" y="100.44642857142857"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="plus.circle" catalog="system" width="128" height="121"/>
+        <namedColor name="BrandBrightOrange">
+            <color red="0.99699997901916504" green="0.58099997043609619" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
     </resources>
 </document>

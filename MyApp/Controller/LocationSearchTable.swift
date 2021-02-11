@@ -21,8 +21,6 @@ class LocationSearchTable : UITableViewController {
     var handleMapSearchDelegate: HandleMapSearch? = nil
 
     override func viewDidLoad() {
-        //
-        
         navigationItem.backButtonTitle = ""
     }
 }
@@ -30,11 +28,6 @@ class LocationSearchTable : UITableViewController {
 
 extension LocationSearchTable : UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        
-        
-        
-        
-//         use return for the search bar --- show all results for general nouns?????????????
         
         guard let searchBarText = searchController.searchBar.text else {return}
         let request = MKLocalSearch.Request()

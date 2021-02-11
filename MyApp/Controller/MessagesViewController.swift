@@ -16,24 +16,22 @@ import Firebase
 class MessagesViewController: UIViewController, UITableViewDelegate {
     
     @IBOutlet weak var msgTV: UITableView!
-    @IBOutlet weak var coverView: UIView!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var newMessage: UITextView!
-    //    @IBOutlet weak var msg: UITextView!
+    @IBOutlet weak var emptyView: UIView!
+    
     let db = Firestore.firestore()
     var messages: [Message] = []
     
-    
-    // this will be a string doc.documentID
     var selectedTrip: String? {
         didSet {
             load()
         }
     }
+    @IBOutlet weak var tvHeight: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // does not need a delegate.
         msgTV.dataSource = self
         msgTV.register(UINib(nibName: K.msgNibName, bundle: nil), forCellReuseIdentifier: K.msgCellIdentifier)
         msgTV.delegate = self
@@ -42,6 +40,7 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
             newMessage.frame.size.height/5
         newMessage.text = "Write text here..."
         newMessage.textColor = UIColor.lightGray
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,48 +55,39 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
             .whereField(K.FStore.tripParentField, isEqualTo: selectedTrip!)
             .order(by: K.FStore.dateField)
             .addSnapshotListener() { (querySnapshot, err) in
-                self.messages = []
+                
                 if let err = err {
                     print("Error getting documents: \(err)")
                 } else {
                     if let queryDocs = querySnapshot?.documents {
-                        var tripCount = 0
-                        for doc in queryDocs {
-                            let data = doc.data()
-                            
-                            print(doc.documentID)
-                          
-                            
-                            if let sender = data[K.FStore.senderField] as? String, let body = data[K.FStore.bodyField] as? String, let date = data[K.FStore.dateField] as? Timestamp, let trip = data[K.FStore.tripParentField] as? String {
-                                self.messages.append(Message(sender: sender, body: body, trip: trip, date: date))
-                                DispatchQueue.main.async {
-                                    self.msgTV.reloadData()
-                                    let index = IndexPath(row: self.messages.count-1, section: 0)
-                                    self.msgTV.scrollToRow(at: index, at: .top, animated: true)
+                        
+                        if queryDocs.count == 0 {
+                            DispatchQueue.main.async {
+                                self.view.bringSubviewToFront(self.emptyView)
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                self.view.bringSubviewToFront(self.msgTV)
+                            }
+                            self.messages = []
+                            for doc in queryDocs {
+                                let data = doc.data()
+                                
+                                if let sender = data[K.FStore.senderField] as? String, let body = data[K.FStore.bodyField] as? String, let date = data[K.FStore.dateField] as? Timestamp, let trip = data[K.FStore.tripParentField] as? String {
+                                    self.messages.append(Message(sender: sender, body: body, trip: trip, date: date))
+                                    DispatchQueue.main.async {
+                                        self.msgTV.reloadData()
+                                        let index = IndexPath(row: self.messages.count-1, section: 0)
+                                        self.msgTV.scrollToRow(at: index, at: .top, animated: true)
+                                    }
                                 }
-                            }
-                            tripCount += 1
-                        }
-                        DispatchQueue.main.async {
-    // !!!!!must test
-                            if querySnapshot?.documents.count == 0 {
-                                // display an view empty text
-                                if let safeView = self.coverView {
-                                    safeView.layer.opacity = 1
-                                }
-                            }
-                            else {
-                                if let safeView = self.coverView {
-                                    safeView.removeFromSuperview()}
-                            }
-                        }
-                    }
-                }
-        }
+                            }// end for
+                        }//else - count>0
+                    }//querydocs
+                }//else
+            }//listener
     }
     
-    // must check that txt msg aint empty or spaces or smth ? trim?
-    // could only enable send when it's not empty?
     @IBAction func send(_ sender: Any) {
         
         if let messageBody = newMessage.text, let messageSender = Auth.auth().currentUser?.email, let parentTrip = selectedTrip {
@@ -115,7 +105,6 @@ class MessagesViewController: UIViewController, UITableViewDelegate {
                         DispatchQueue.main.async {
                             self.newMessage.text = ""
                             self.textViewDidChange(self.newMessage)
-//                            self.newMessage.resignFirstResponder()
                         }
                     }
                 }
@@ -180,6 +169,37 @@ extension MessagesViewController: UITextViewDelegate {
         if newMessage.textColor == UIColor.lightGray {
             newMessage.text = nil
             newMessage.textColor = .label
+            
+            
+            //            let cells = msgTV.visibleCells
+            //            var size: CGFloat = 0.0
+            //            for cell in cells {
+            //                size += cell.frame.size.height
+            //            }
+            //            print("the size is \(size)")
+            //            if messages.count > 0 {
+            //            let index = IndexPath(row: 0, section: 0)
+            //            if size <= msgTV.frame.size.height/2 {
+            //                print("IT IS LESS ")
+            
+            //                let x = self.msgTV.heightAnchor.constraint(equalToConstant: size)
+            //                x.isActive = true
+            //                msgTV.setContentOffset(CGPoint(x: self.msgTV.contentOffset.x, y: self.msgTV.contentOffset.y + size), animated: true)
+            
+            
+            //                let hConst = self.msgTV.frame.height - 300
+            //                self.msgTV.removeConstraint(self.tvHeight)
+            //            self.tvHeight = self.msgTV.heightAnchor.constraint(equalToConstant: hConst)
+            //
+            //            self.tvHeight.isActive = true
+            //            self.msgTV.setContentOffset(CGPoint(x: self.msgTV.contentOffset.x, y: self.msgTV.contentOffset.y + 700), animated: true)
+            
+            //                msgTV.isScrollEnabled = true
+            //                self.msgTV.scrollToRow(at: index, at: .bottom, animated: true)
+            //
+            //
+            //            }
+            //            }
         }
     }
     

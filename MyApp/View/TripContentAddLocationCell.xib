@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,7 +18,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bQ0-sS-hiw">
-                        <rect key="frame" x="40" y="13" width="245" height="18.5"/>
+                        <rect key="frame" x="47" y="13" width="238" height="18.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
@@ -53,7 +53,7 @@
                     <constraint firstItem="drL-a0-gu0" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="ST9-MP-lg9"/>
                     <constraint firstAttribute="trailing" secondItem="dng-zH-q31" secondAttribute="trailing" id="VJA-nA-uy1"/>
                     <constraint firstItem="bQ0-sS-hiw" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="bMF-uF-bXz"/>
-                    <constraint firstItem="bQ0-sS-hiw" firstAttribute="leading" secondItem="drL-a0-gu0" secondAttribute="trailing" constant="10" id="pzH-4t-MKd"/>
+                    <constraint firstItem="bQ0-sS-hiw" firstAttribute="leading" secondItem="drL-a0-gu0" secondAttribute="trailing" constant="17" id="pzH-4t-MKd"/>
                     <constraint firstItem="drL-a0-gu0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="wqo-o1-fbZ"/>
                 </constraints>
             </tableViewCellContentView>

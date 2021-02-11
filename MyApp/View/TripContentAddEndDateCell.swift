@@ -21,19 +21,32 @@ class TripContentAddEndDateCell: UITableViewCell {
             print("ALL SET")
         }
     }
+    var endDate: Date?
+    
+    @IBOutlet weak var datePicker: UIDatePicker!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         addTF.delegate = self
         
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = .date
-        datePicker.tintColor = UIColor.systemOrange
-        datePicker.backgroundColor = UIColor.systemOrange
-        addTF.inputView = datePicker
+        
+//
+//        datePicker.tintColor = .black
+//        datePicker.backgroundColor = UIColor.systemOrange
+//        if addTF.text == "" {
+//            addTF.inputView = datePicker
+//        }
+//        else {
+//            addTF.inputView = nil
+//        }
+        
+      
         datePicker.addTarget(self, action: #selector(handleDatePicker), for: .valueChanged)
-        df.dateFormat = "dd-MM-yyyy"
+//        datePicker.isHidden = true
+        if let bgView = datePicker.subviews.first?.subviews.first?.subviews.first {
+            bgView.backgroundColor = .clear
+        }
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -44,9 +57,12 @@ class TripContentAddEndDateCell: UITableViewCell {
     
     
     @objc func handleDatePicker(sender: UIDatePicker) {
-        
+        df.dateFormat = "dd-MM-yyyy"
         addTF.text = df.string(from: sender.date)
-        
+        endDate = sender.date
+        addTF.inputView = nil
+        addTF.resignFirstResponder()
+        addTF.becomeFirstResponder()
         
     }
 }
@@ -55,18 +71,23 @@ class TripContentAddEndDateCell: UITableViewCell {
 //MARK: - TF delegate
 extension TripContentAddEndDateCell: UITextFieldDelegate {
     
+//    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+//        datePicker.isHidden = false
+//        return true
+//    }
     func textFieldDidEndEditing(_ textField: UITextField) {
         textField.resignFirstResponder()
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        let edRef = db.collection("trips").document(TripContentAddStartDateCell.selectedTrip!)
-        if let date = df.date(from: addTF.text!) {
-            edRef.updateData([
+        let sdRef = db.collection("trips").document(TripContentAddEndDateCell.selectedTrip!)
+
+//        check if date is ok
+//        if (addTF.text != "") {
+            sdRef.updateData([
                 "endDate": FieldValue.arrayUnion(
                     [
                         [
-                            "date" : date,
+                            "date" : endDate,
                             "votes": 0,
                             "voters": []
                         ]
@@ -79,9 +100,14 @@ extension TripContentAddEndDateCell: UITextFieldDelegate {
                 }
             }
             addTF.text = ""
-        } else {
-            // input check here toaster to alert of error?
-        }
+        datePicker.datePickerMode = .date
+        addTF.inputView = datePicker
+        datePicker.addTarget(self, action: #selector(handleDatePicker), for: .valueChanged)
+        addTF.resignFirstResponder()
+        datePicker.resignFirstResponder()
+//        datePicker.isHidden = true
+        print(datePicker.subviews)
         return true
+        
     }
 }

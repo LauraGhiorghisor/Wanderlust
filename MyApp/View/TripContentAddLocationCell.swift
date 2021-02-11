@@ -31,6 +31,7 @@ class TripContentAddLocationCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         addTF.delegate = self
+        addTF.autocapitalizationType = .words
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

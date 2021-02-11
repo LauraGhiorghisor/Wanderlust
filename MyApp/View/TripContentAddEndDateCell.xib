@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,8 +18,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jro-vy-oOX">
-                        <rect key="frame" x="40" y="13" width="245" height="18.5"/>
+                    <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jro-vy-oOX">
+                        <rect key="frame" x="40" y="13" width="4" height="18.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
@@ -32,39 +33,37 @@
                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20" scale="large"/>
                         </state>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dsI-6N-PlK">
-                        <rect key="frame" x="290" y="6" width="30" height="32"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="32" id="ARK-W3-0bp"/>
-                            <constraint firstAttribute="width" constant="30" id="BE9-bf-ZZT"/>
-                        </constraints>
-                        <color key="tintColor" red="1" green="0.57810515169999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <state key="normal" image="chevron.right" catalog="system">
-                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20"/>
-                        </state>
-                    </button>
+                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="compact" translatesAutoresizingMaskIntoConstraints="NO" id="Kdx-qc-hrs">
+                        <rect key="frame" x="35" y="0.0" width="285" height="44"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" name="BrandBrightOrange"/>
+                    </datePicker>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="trailing" secondItem="Kdx-qc-hrs" secondAttribute="trailing" id="0LW-dv-dRA"/>
                     <constraint firstItem="jro-vy-oOX" firstAttribute="leading" secondItem="Snf-lC-ibJ" secondAttribute="trailing" constant="10" id="1c5-0g-1aj"/>
-                    <constraint firstItem="dsI-6N-PlK" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Czh-dC-cHd"/>
+                    <constraint firstItem="Kdx-qc-hrs" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="39v-U0-Hhx"/>
+                    <constraint firstItem="Kdx-qc-hrs" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="EFF-Xo-EbU"/>
                     <constraint firstItem="Snf-lC-ibJ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="SoQ-GY-rww"/>
-                    <constraint firstAttribute="trailing" secondItem="dsI-6N-PlK" secondAttribute="trailing" id="Sv2-nf-V1n"/>
                     <constraint firstItem="Snf-lC-ibJ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="VCo-rk-A1g"/>
                     <constraint firstItem="jro-vy-oOX" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="VYV-yG-MFv"/>
-                    <constraint firstItem="dsI-6N-PlK" firstAttribute="leading" secondItem="jro-vy-oOX" secondAttribute="trailing" constant="5" id="yBs-Tu-vaT"/>
+                    <constraint firstItem="Kdx-qc-hrs" firstAttribute="leading" secondItem="Snf-lC-ibJ" secondAttribute="trailing" constant="5" id="hyv-I1-myv"/>
+                    <constraint firstAttribute="bottom" secondItem="Kdx-qc-hrs" secondAttribute="bottom" id="qRg-Gr-MLR"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="addButton" destination="Snf-lC-ibJ" id="YXw-xl-ddO"/>
                 <outlet property="addTF" destination="jro-vy-oOX" id="QQT-bV-JOr"/>
-                <outlet property="goButton" destination="dsI-6N-PlK" id="Smg-hG-Qu0"/>
+                <outlet property="datePicker" destination="Kdx-qc-hrs" id="Xja-hj-JQk"/>
             </connections>
             <point key="canvasLocation" x="107" y="24"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="chevron.right" catalog="system" width="96" height="128"/>
         <image name="plus.circle" catalog="system" width="128" height="121"/>
+        <namedColor name="BrandBrightOrange">
+            <color red="0.99699997901916504" green="0.58099997043609619" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
     </resources>
 </document>

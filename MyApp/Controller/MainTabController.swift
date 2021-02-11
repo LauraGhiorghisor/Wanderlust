@@ -20,11 +20,12 @@ class MainTabController: UITabBarController {
 //                        item.badgeColor = UIColor(hue: 0.25, saturation: 1, brightness: 1, alpha: 1)
                         
                         let attributesNormal: [NSAttributedString.Key: Any] = [
-                            .foregroundColor: UIColor(named: "\(K.CorporateColours.orange)")!
+//                            .foregroundColor: UIColor(named: "\(K.CorporateColours.orange)")!
+                            .foregroundColor: UIColor.label
                             
                         ]
                         let attributesSelected: [NSAttributedString.Key: Any] = [
-                            .foregroundColor: UIColor.black
+                            .foregroundColor: UIColor.label
                         ]
                       
                         item.setBadgeTextAttributes(attributesNormal, for: .normal)

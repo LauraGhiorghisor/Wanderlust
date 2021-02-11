@@ -15,7 +15,6 @@ class TripEventCell: UITableViewCell {
     
     @IBOutlet weak var line1Label: UILabel!
     
-    @IBOutlet weak var line23Label: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

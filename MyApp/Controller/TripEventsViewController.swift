@@ -9,90 +9,67 @@
 import UIKit
 import MapKit
 import Firebase
+import CoreLocation
 
-// define our own protocol
+// MUST ADD ALL ITEMS TO MAP WHEN LOADING
 protocol HandleMapSearch {
     func dropPinZoomIn(placemark: MKPlacemark, zoom: Bool)
+    func dropPinZoomIn(ann: MKAnnotation, zoom: Bool)
 }
 
 
-// Before releasing an MKMapView object for which you have set a delegate, remember to set that object’s delegate property to nil. MapKit calls all of your delegate methods on the app's main thread.
-
 class TripEventsViewController: UIViewController {
     
-    
-    // use a did set on location, coming from completed trip.
-    var selectedRegion: MKCoordinateRegion? {
-        // set to nil for new trip?
-        didSet {
-            zoomInOnSelectedRegion()
-        }
-    }
+    var selectedRegion: MKCoordinateRegion?
     
     var selectedTrip: String? {
-        // set to nil for new trip?
-        
         didSet {
             print("trip set in events VC")
         }
     }
+    var selectedLocation: Location?
+    var allLocations: [Location]?
     
-    
-    // use for adding pin to map
-    var pinImage: String?
-    var customSearchOn = false
-    
-    
-    
-    //<a href="https://www.vecteezy.com/free-vector/car">Car Vectors by Vecteezy</a>
-    //<a href="https://www.vecteezy.com/free-vector/heart-shape">Heart Shape Vectors by Vecteezy</a>
-    
-    var resultSearchController:UISearchController? = nil
-    
-    let locationManager = CLLocationManager()
     
     @IBOutlet weak var mapView: MKMapView!
-    var matchingItems: [MKMapItem] = []
-    
-    var selectedPin: MKPlacemark? = nil
-    var spanValue: CLLocationDegrees = 0.05
-    let db = Firestore.firestore()
-    
-    
-    // buttons
-    
     @IBOutlet weak var optionsView: UIView!
-    
     @IBOutlet weak var pinNameOptionsView: UIView!
-    
     @IBOutlet weak var openInMapsButton: UIButton!
-    
     @IBOutlet weak var addToTripButton: UIButton!
-    
-    
     @IBOutlet weak var pinNameTF: UITextField!
-    
     @IBOutlet weak var addToMapButton: UIButton!
     
     var pinNameOptionsViewShowing = false
     var optionsViewShowing = false
+    var matchingItems: [MKMapItem] = []
+    var selectedPin: MKPlacemark?
+    var selectedPinName: String?
+    var selectedAnnotation: MKAnnotation?
     
+    
+    var spanValue: CLLocationDegrees = 0.05
+    let db = Firestore.firestore()
     
     // all annotations will be centralized, per session, in this array, with the purpose of triggering the next one when clicking.
     var currentAnnotations: [MKPointAnnotation] = []
     var placemarkForUserDeclaredPin: MKPlacemark?
-        
+    
+    var pinImage: String?
+//    var customSearchOn = false
+    var resultSearchController:UISearchController? = nil
+    let locationManager = CLLocationManager()
+    var nearbyButtonTapped = false
+    
     //MARK: - View did Load
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    
         // must initialize currentANnotations, or pass them from previous controller
         mapView.addAnnotations(currentAnnotations)
         
         //setting nav
-        navigationController!.navigationBar.topItem?.title = "Events"
+//        navigationController!.navigationBar.topItem?.title = "Events"
         navigationController!.navigationBar.tintColor = UIColor(named: "BrandTeal")
         
         // buttons
@@ -118,12 +95,29 @@ class TripEventsViewController: UIViewController {
         //delegates
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    
         
-        
+        if selectedRegion == nil {
         let location = CLLocationCoordinate2D(latitude: 51.50, longitude: 0.12)
         let span = MKCoordinateSpan(latitudeDelta: spanValue, longitudeDelta: spanValue)
         selectedRegion = MKCoordinateRegion(center: location, span: span)
-        //            mapView.setRegion(selectedRegion!, animated: true)
+        }
+        if selectedLocation == nil {
+            zoomInOnSelectedRegion()
+            
+        } else {
+            print("PLACEMARK IS ")
+            print(selectedLocation)
+            dropPinZoomIn(ann: selectedLocation!, zoom: true)
+            
+        }
+        if let safeLocations = allLocations {
+            for loc in safeLocations {
+                dropPinZoomIn(ann: loc, zoom: true)
+            }
+        }
+        
+        
         
         
         // Creates the view controller with the specified identifier and initializes it with the data from the storyboard.
@@ -149,11 +143,34 @@ class TripEventsViewController: UIViewController {
         locationSearchTable.handleMapSearchDelegate = self
         
         mapView.delegate = self
+        // Center it around the passed over value of location
+//        mapView.centerCoordinate =
+        mapView.showsCompass = true
+        
+        
+        // Core location set up
+        
+      
+    }
+    
+
+    override func viewWillDisappear(_ animated: Bool) {
+        locationManager.stopUpdatingLocation()
+    }
+    
+    @IBAction func nearbySearchTapped(_ sender: UIButton) {
+        nearbyButtonTapped = true
+        locationManager.requestWhenInUseAuthorization()
+        spanValue = 0.0005
+        locationManager.requestLocation()
+        // for continuous use startupdating location
+        spanValue = 0.05
+        print(nearbyButtonTapped)
     }
     
     
+    
     // options buttons
-    // did tap??????????
     @IBAction func openInMapsTapped(_ sender: UIButton) {
         getDirections()
         optionsView.isHidden = true
@@ -166,9 +183,7 @@ class TripEventsViewController: UIViewController {
     
     @IBAction func addToMapTapped(_ sender: UIButton) {
         
-       
         if let safeText = pinNameTF.text, let placemarkPin = placemarkForUserDeclaredPin {
-            
             let annotation = MKPointAnnotation()
             annotation.coordinate = placemarkPin.coordinate
             annotation.title = safeText
@@ -178,280 +193,112 @@ class TripEventsViewController: UIViewController {
             mapView.addAnnotation(annotation)
             currentAnnotations.append(annotation)
         }
-      
         addToMapButton.resignFirstResponder()
         pinNameOptionsView.isHidden = true
     }
     
     
     // https://stackoverflow.com/questions/34431459/ios-swift-how-to-add-pinpoint-to-map-on-touch-and-get-detailed-address-of-th
-    
-    
     @IBAction func mapDidTap(_ sender: UITapGestureRecognizer) {
         
         if optionsView.isHidden == false {
-        optionsView.isHidden = true
+            optionsView.isHidden = true
             return
         }
         if pinNameOptionsView.isHidden == false {
-        pinNameOptionsView.isHidden = true
+            pinNameOptionsView.isHidden = true
             return
         }
         
         optionsView.isHidden = true
         pinNameOptionsView.isHidden = true
-        //        let location = sender.location(in: mapView)
-        //        let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
-        //
-        //
-        //        let geoLoc = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        //        let geocoder = CLGeocoder()
-        //        geocoder.reverseGeocodeLocation(geoLoc) { placemarks, error in
-        //
-        //            guard error == nil else {
-        //                print("*** Error in \(#function): \(error!.localizedDescription)")
-        //                return
-        //            }
-        //
-        //            guard let placemark = placemarks?[0] else {
-        //                print("*** Error in \(#function): placemark is nil")
-        //                return
-        //            }
-        //
-        //
-        //            print("do we have a name")
-        //            print(placemark.name )
-        //            print(placemark.areasOfInterest)
-        //            print(placemark.locality)
-        //
-        //            var p = MKPlacemark(placemark: placemark)
-        //            print("trying mkpl")
-        //            print(p.name)
-        //
-        
-        //        }
         
         let location = sender.location(in: mapView)
         let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
         
-        for ann in currentAnnotations {
-            print("going here")
-            if ann.coordinate.longitude <= coordinate.longitude + 0.001 && ann.coordinate.longitude >= coordinate.longitude - 0.001 && ann.coordinate.latitude <= coordinate.latitude + 0.001 && ann.coordinate.latitude >= coordinate.latitude - 0.001 {
-                print("CLICKING ON ANNOTATIOOOOON")
-                return
-            }
-        }
-        
-        
-        customSearchOn = true
+        //NOT sure if needed
+        //        for ann in currentAnnotations {
+        //            print("going here")
+        //            if ann.coordinate.longitude <= coordinate.longitude + 0.001 && ann.coordinate.longitude >= coordinate.longitude - 0.001 && ann.coordinate.latitude <= coordinate.latitude + 0.001 && ann.coordinate.latitude >= coordinate.latitude - 0.001 {
+        //                print("CLICKING ON ANNOTATIOOOOON")
+        //                return
+        //            }
+        //        }
+    }
+    
+    @IBAction func mapDidPressLong(_ sender: UILongPressGestureRecognizer) {
+        //        customSearchOn = true
         pinImage = "mappin.circle"
         
+        let location = sender.location(in: mapView)
+        let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
         let geoLoc = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(geoLoc) { placemarks, error in
-            
             guard error == nil else {
                 print("*** Error in \(#function): \(error!.localizedDescription)")
                 return
             }
-            
-            guard let placemark = placemarks?[0] else {
+            guard let placemarks = placemarks else {
                 print("*** Error in \(#function): placemark is nil")
                 return
             }
-            
-            let request = MKLocalSearch.Request()
-            //                    request.naturalLanguageQuery = "\(coordinate.latitude)\u{00B0}N \(coordinate.longitude) \u{00B0}E"
-            request.naturalLanguageQuery = placemark.name!
-            print("the query is")
-            print(request.naturalLanguageQuery!)
-            request.region = self.mapView!.region
-            request.pointOfInterestFilter = .includingAll
-            // could add courts
-            
-//                        let poiCustom1 = MKPointOfInterestCategory(rawValue: "Coffee shop")
-//            request.pointOfInterestFilter = .init(including: [poiCustom1, .airport,.amusementPark, .aquarium, .atm, .bakery, .bank, .beach, .brewery,   .restroom, .restaurant])
-            request.resultTypes = .pointOfInterest
-            
-            let search = MKLocalSearch(request: request)
-            search.start { response, _ in
-                guard let response = response else {
-                    
-                    
-                        print("make new option to add text here ")
-                        self.pinNameOptionsView.isHidden = false
-                    self.placemarkForUserDeclaredPin = MKPlacemark(placemark: placemark)
-                    return
-                    
-                }
+            let placemark = placemarks[0]
+            if let areas = placemark.areasOfInterest, areas.count > 0, let name = placemark.name {
+                // IT MEANS there's an actual existing place
+                self.dropPinZoomIn(placemark: MKPlacemark(placemark: placemark), zoom: false)
                 
-                                print("the items", response.mapItems)
-                if response.mapItems.count > 0 {
-                    print("thre are items")
-                    let item = response.mapItems[0]
-                    print(item)
-                    //                    if item.pointOfInterestCategory != .none {
-                    self.dropPinZoomIn(placemark: item.placemark, zoom: false)
-                    //                    }
-                    //
-                }
-
-                
-                
-//                                for item in response.mapItems {
-//                                    print(item)
-//                                    var found = false
-//                                    for annotation in self.currentAnnotations {
-//                                        if item == annotation {
-//                                            found = true
-//                                        }
-//                                    }
-//                                    if found == true {
-//                                        continue
-//                                    } else {
-//                                        self.dropPinZoomIn(placemark: item.placemark, zoom: false)
-//                                        break
-//                                    }
-//
-//                                }
-                
-                
-                
-                //                    if let name = item.name, let location = item.placemark.location {
-                //                        print("\(name): \(location.coordinate.latitude),\(location.coordinate.longitude)")
-                //                        self.dropPinZoomIn(placemark: item.placemark, zoom: false)
-                //                    }
-                
+            } else {
+                self.pinNameOptionsView.isHidden = false
+                self.placemarkForUserDeclaredPin = MKPlacemark(placemark: placemark)
             }
         }
-        customSearchOn = false
     }
-    
-    @IBAction func mapDidPressLong(_ sender: UILongPressGestureRecognizer) {
-//        let location = sender.location(in: mapView)
-//        let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
-//
-//        customSearchOn = true
-//        pinImage = "mappin.circle"
-//
-//        let geoLoc = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-//        let geocoder = CLGeocoder()
-//        geocoder.reverseGeocodeLocation(geoLoc) { placemarks, error in
-//
-//            guard error == nil else {
-//                print("*** Error in \(#function): \(error!.localizedDescription)")
-//                return
-//            }
-//
-//            guard let placemark = placemarks?[0] else {
-//                print("*** Error in \(#function): placemark is nil")
-//                return
-//            }
-//
-//            let request = MKLocalSearch.Request()
-//            //                    request.naturalLanguageQuery = "\(coordinate.latitude)\u{00B0}N \(coordinate.longitude) \u{00B0}E"
-//            request.naturalLanguageQuery = placemark.name!
-//            print("the query is")
-//            print(request.naturalLanguageQuery!)
-//            request.region = self.mapView!.region
-//            request.pointOfInterestFilter = .includingAll
-//            //            let poiCustom1 = MKPointOfInterestCategory(rawValue: "Coffee shop")
-//            //            request.pointOfInterestFilter = .init(including: [poiCustom1, .airport,.amusementPark, .aquarium, .atm, .bakery, .bank, .beach, .brewery, .  .restroom, .restaurant])
-//            request.resultTypes = .pointOfInterest
-//
-//            let search = MKLocalSearch(request: request)
-//            search.start { response, _ in
-//                guard let response = response else {
-//                    return
-//                }
-//
-//                //                print("the items", response.mapItems)
-//                if response.mapItems.count > 0 {
-//                    print("thre are items")
-//                    let item = response.mapItems[0]
-//                    print(item)
-//                    //                    if item.pointOfInterestCategory != .none {
-//                    self.dropPinZoomIn(placemark: item.placemark, zoom: false)
-//                    //                    }
-//                    //
-//                }
-//                else {
-//                    print("make new option to add text here ")
-//                    self.pinNameOptionsView.isHidden = false
-//                }
-//                //
-//                //                for item in response.mapItems {
-//                //                    print(item)
-//                //
-//                //                }
-//
-//
-//
-//                //                    if let name = item.name, let location = item.placemark.location {
-//                //                        print("\(name): \(location.coordinate.latitude),\(location.coordinate.longitude)")
-//                //                        self.dropPinZoomIn(placemark: item.placemark, zoom: false)
-//                //                    }
-//
-//            }
-//        }
-//        customSearchOn = false
-    }
-    
     
     
     
     func zoomInOnSelectedRegion() {
-        print("calling the zoommethod because region has been set ---------")
         if let safeRegion = selectedRegion {
             mapView.setRegion(safeRegion, animated: true)
-        } else {
-            locationManager.requestWhenInUseAuthorization()
-            locationManager.requestLocation()
-            
-            if let safeLocation = locationManager.location {
-                let currentLocation = CLLocationCoordinate2D(latitude: safeLocation.coordinate.latitude, longitude: safeLocation.coordinate.longitude)
-                let span = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
-                let currentRegion = MKCoordinateRegion(center: currentLocation, span: span)
-                mapView.setRegion(currentRegion, animated: true)
-            }
-            
         }
-        
+//            else
+//        {
+//            locationManager.requestWhenInUseAuthorization()
+//            locationManager.requestLocation()
+//
+//            if let safeLocation = locationManager.location {
+//                let currentLocation = CLLocationCoordinate2D(latitude: safeLocation.coordinate.latitude, longitude: safeLocation.coordinate.longitude)
+//                let span = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
+//                let currentRegion = MKCoordinateRegion(center: currentLocation, span: span)
+//                mapView.setRegion(currentRegion, animated: true)
+//            }
+//        }
     }
     
     @IBAction func restaurantsSearch(_ sender: UIButton) {
-        customSearch(pinImage: "gift", searFor: "Restaurants")
+        customSearch(pinImage: "gift", searchFor: "Restaurants")
+        customSearch(pinImage: "bed.double", searchFor: "Coffee & Tea")
     }
-    
-    
-    @IBAction func cafesSearch(_ sender: UIButton) {
-        
-        customSearch(pinImage: "bed.double", searFor: "Coffee & Tea")
-    }
-    
     
     @IBAction func lodgingSearch(_ sender: UIButton) {
-        
-        customSearch(pinImage: "bed.double.fill", searFor: "Hotels & Events")
-        customSearch(pinImage: "bed.double.fill", searFor: "Lodging")
-        customSearch(pinImage: "bed.double.fill", searFor: "Rent")
-        customSearch(pinImage: "bed.double.fill", searFor: "Hotel")
-        
+        customSearch(pinImage: "bed.double.fill", searchFor: "Hotels & Events")
+        customSearch(pinImage: "bed.double.fill", searchFor: "Lodging")
+        customSearch(pinImage: "bed.double.fill", searchFor: "Rent")
+        customSearch(pinImage: "bed.double.fill", searchFor: "Hotel")
     }
     
     @IBAction func touristSearch(_ sender: UIButton) {
-        customSearch(pinImage: "camera.fill", searFor: "Touristic attractions")
+        customSearch(pinImage: "camera.fill", searchFor: "Touristic attractions")
     }
     
     
     @IBAction func museumSearch(_ sender: UIButton) {
-        customSearch(pinImage: "house.fill", searFor: "Museums")
+        customSearch(pinImage: "house.fill", searchFor: "Museums")
     }
     
     
-    
-    func customSearch(pinImage image: String, searFor keyWord: String) {
-        customSearchOn = true
+    func customSearch(pinImage image: String, searchFor keyWord: String) {
+//        customSearchOn = true
         pinImage = image
         
         let request = MKLocalSearch.Request()
@@ -469,8 +316,6 @@ class TripEventsViewController: UIViewController {
             
             
         }
-        //            customSearchOn = false
-        //    pinImage = "mappin.circle.fill"
     }
     
     
@@ -478,16 +323,19 @@ class TripEventsViewController: UIViewController {
 extension TripEventsViewController : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedWhenInUse {
-            locationManager.requestLocation()
+        if status == .authorizedWhenInUse && nearbyButtonTapped == true {
+    locationManager.requestLocation()
+            nearbyButtonTapped = false
         }
+//        else {
+//            locationManager.requestLocation()
+//        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let safeLocation = locations.first {
-            //            // why is it first?????????
             let location = CLLocationCoordinate2D(latitude: safeLocation.coordinate.latitude, longitude: safeLocation.coordinate.longitude)
-            let span = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
+            let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
             let region = MKCoordinateRegion(center: location, span: span)
             mapView.setRegion(region, animated: true)
         }
@@ -500,23 +348,29 @@ extension TripEventsViewController : CLLocationManagerDelegate {
 }
 
 
-
 //MARK: - Handle map search
 
 extension TripEventsViewController: HandleMapSearch {
     
     
     func dropPinZoomIn(placemark: MKPlacemark, zoom: Bool) {
-        
-        /// MUST ALSO MAKE THE NEW PIN FOCUS !!!!!!!
         selectedPin = placemark
-        // clear existing pins
+        // clear existing pins???????
         //         mapView.removeAnnotations(mapView.annotations)
         let annotation = MKPointAnnotation()
         annotation.coordinate = placemark.coordinate
-        annotation.title = placemark.name
+        annotation.title = placemark.name ?? "Destination"
+      
+        if let city = placemark.locality {
+            annotation.subtitle = "\(city)"
+        }
+        if let state = placemark.administrativeArea {
+            annotation.subtitle = "\(state)"
+        }
         if let city = placemark.locality, let state = placemark.administrativeArea {
+            
             annotation.subtitle = "\(city), \(state)"
+//            let code = placemark.countryCode, let country = placemark.country, let areas = placemark.areasOfInterest, let region = placemark.region
         }
         mapView.addAnnotation(annotation)
         currentAnnotations.append(annotation)
@@ -527,172 +381,134 @@ extension TripEventsViewController: HandleMapSearch {
         }
     }
     
+    func dropPinZoomIn(ann: MKAnnotation, zoom: Bool) {
+       
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = ann.coordinate
+        annotation.title = ann.title ?? "Destination"
+        annotation.subtitle = ann.subtitle ?? "No description available"
+
+        
+        mapView.addAnnotation(annotation)
+        currentAnnotations.append(annotation)
+        if zoom {
+            let span = MKCoordinateSpan(latitudeDelta: spanValue, longitudeDelta: spanValue)
+            let region = MKCoordinateRegion(center: ann.coordinate, span: span)
+            mapView.setRegion(region, animated: true)
+        }
+    }
+    
+    
 }
 
 //MARK: - Map View Delegate - handles clicking on annotations
 extension TripEventsViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
-        print(" i am in didadd views")
-        //            for view in views {
-        //                view.
-        //            }
+        
+print("DID ADD CALLED")
+    for view in views {
+        view.tintColor = UIColor(named: K.CorporateColours.teal)
+    }
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         optionsView.isHidden = false
-        
+        if let ann = view.annotation {
+//            print("annotation props are \(ann.title) \(ann.subtitle) \(ann.description)")
+
+            selectedPin = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: ann.coordinate.latitude, longitude: ann.coordinate.longitude), addressDictionary: ["name": ann.title])
+            selectedPinName = ann.title ?? "Your destination"
+            selectedAnnotation = ann
+        }
     }
     
+  
     
-    //        func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-    //
-    //            if annotation is MKUserLocation {
-    //                //return nil so map view draws "blue dot" for standard user location
-    //                return nil
-    //            }
-    //
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        print("AM I IN HERE???????????????????????????")
+        
+//        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "myAnnotation") as? MKPinAnnotationView
+        
+         let annotationView = mapView.view(for: annotation)
+//            as? MKPinAnnotationView    {
+        print("IS THIS VEING CALLED VIEW FORRRRRRRR")
+        print(annotationView?.tintColor)
+        annotationView?.tintColor = UIColor(named: K.CorporateColours.teal)
+//        annotationView.pinTintColor = UIColor(named: K.CorporateColours.teal)
+//            return annotationView
+//        }
+//
+        
+        
+//        let identifier = "Placemark"
+//
+//          // attempt to find a cell we can recycle
+//          var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
+//        annotationView?.markerTintColor = UIColor(named: K.CorporateColours.teal)
+        
+        return annotationView
+    }
     
-    
-    //            let reuseId = "pin"
-    //            var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-    //            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-    //            guard let pw = pinView else {
-    //                print("Pin view was null")
-    //                return nil
-    //            }
-    //
-    //
-    //            if #available(iOS 11.0, *) {
-    //                pw.clusteringIdentifier = "PinCluster"
-    //            } else {
-    //               // Fallback on earlier versions
-    //            }
-    //
-    //            // should probs be set before adding it?
-    //            //            pw.image = UIImage(systemName: pinImage!)
-    //
-    ////            if customSearchOn {
-    ////                print("IS THI SCUSTOM SEARCH ONNVBKDHFBRKBF")
-    ////                pw.image = UIImage(systemName: "car")
-    ////
-    ////            } else {
-    ////                pw.image = UIImage(systemName: "mappin")
-    ////            }
-    //            pw.image = UIImage(systemName: "flag")
-    //            pw.animatesDrop = true
-    //            pw.pinTintColor = .systemOrange
-    //            pw.canShowCallout = true
-    //            let smallSquare = CGSize(width: 35  , height: 27)
-    //
-    //            let button = UIButton(frame: CGRect(origin: CGPoint.zero, size: smallSquare))
-    //            button.setBackgroundImage(UIImage(systemName: "car"), for: .normal)
-    //            button.tintColor = UIColor(named: "BrandTeal")
-    //            button.addTarget(self, action: #selector(self.getDirections), for: .touchUpInside)
-    //            pinView?.leftCalloutAccessoryView = button
-    //
-    //            let addButton = UIButton(frame: CGRect(origin: CGPoint.zero, size: smallSquare))
-    //            addButton.setBackgroundImage(UIImage(systemName: "text.badge.plus"), for: .normal)
-    //            addButton.tintColor = UIColor(named: "BrandTeal")
-    //            addButton.addTarget(self, action: #selector(self.addToFavourites), for: .touchUpInside)
-    //            addButton.setTitleColor(UIColor.systemOrange, for: .normal)
-    //            pinView?.rightCalloutAccessoryView = addButton
-    //            return pw
-    //        }
-    
-    
-    
-    //MARK: - Rewrite to do other stuff such as add to ur list of objecties etc.
+    // https://stackoverflow.com/questions/28604429/how-to-open-maps-app-programmatically-with-coordinates-in-swift
     @objc func getDirections () {
         if let selectedPin = selectedPin {
-            let mapItem = MKMapItem(placemark: selectedPin)
-            //                let launchOptions = [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving]
-            
-            // https://stackoverflow.com/questions/28604429/how-to-open-maps-app-programmatically-with-coordinates-in-swift
-            let latitude:CLLocationDegrees =  selectedPin.coordinate.latitude
-            let longitude:CLLocationDegrees =  selectedPin.coordinate.longitude
-            
             let regionDistance:CLLocationDistance = 100
-            let coordinates = CLLocationCoordinate2DMake(latitude, longitude)
-            let regionSpan = MKCoordinateRegion(center: coordinates, latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
-            
-            //                let dirRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: selectedPin.coordinate.latitude, longitude: selectedPin.coordinate.longitude), span:)
-            
-            let options = [
-                MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
-                MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)
-            ]
-            let launchOpt2 = [MKLaunchOptionsMapCenterKey : MKLaunchOptionsMapCenterKey]
-            mapItem.name = mapItem.placemark.name
-            print("printing the name-----------")
+            let regionSpan = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: selectedPin.coordinate.latitude, longitude: selectedPin.coordinate.longitude), latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
+//            let options = [
+//                MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
+//                MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)
+//            ]
+//            let launchOpt2 = [MKLaunchOptionsMapCenterKey : MKLaunchOptionsMapCenterKey]
+            let mapItem = MKMapItem(placemark: selectedPin)
+            mapItem.name = selectedPinName
             mapItem.openInMaps(launchOptions: nil)
-            //                mapItem.openInMaps(launchOptions: <#T##[String : Any]?#>, from: <#T##UIScene?#>, completionHandler: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>)
-            
-            //                if (UIApplication.shared.canOpenURL(NSURL(string:"http://maps.apple.com")! as URL)) {
-            //                    UIApplication.shared.openURL(NSURL(string:
-            //                                                                "http://maps.apple.com/?daddr=San+Francisco,+CA&saddr=cupertino")! as URL)
-            //                } else {
-            //                  NSLog("Can't use Apple Maps");
-            //                }
         }
     }
     //MARK: - Add to favourites implementation
     @objc func addToFavourites() {
-        if let safePin = selectedPin {
-            print("added to favourites")
-            
-            
-            // must use geocoder to reverse from coord to address
-            let location = CLLocation(latitude: safePin.coordinate.latitude, longitude: safePin.coordinate.longitude)
-            print(location)
-            
+        
+        if let safePin = selectedPin, let safeAnnotation = selectedAnnotation {
+//            let location = CLLocation(latitude: safePin.coordinate.latitude, longitude: safePin.coordinate.longitude)
             let gp = GeoPoint(latitude: safePin.coordinate.latitude, longitude: safePin.coordinate.longitude)
             
-            //                selectedTrip = "7VuLZ4KgYxTMQWIa7dkX"
-            db.collection("locations").whereField("tripID",  isEqualTo: selectedTrip!)
-                .getDocuments { (querySnapshot, err) in
-                    
-                    if let docs = querySnapshot?.documents {
-                        
-                        if docs.count > 0 {
-                            
-                            print("there are docs ", docs.count)
-                            
-                            let ref = docs[0].reference
-                            
-                            
-                            ref.updateData([
-                                //                                "tripID": self.selectedTrip!,
-                                "locations": FieldValue.arrayUnion([gp])
-                                //                                "dateAdded": FieldValue.serverTimestamp()
-                            ]) { err in
-                                if let err = err {
-                                    print("Error updating document: \(err)")
-                                } else {
-                                    print("Document successfully updated")
-                                }
-                            }
-                        } else {
-                            let ref = self.db.collection("locations").document()
-                            ref.setData ([
-                                "tripID": self.selectedTrip!,
-                                "locations": FieldValue.arrayUnion([gp])
-                                //                                    "dateAdded": FieldValue.serverTimestamp()
-                            ]) { err in
-                                if let err = err {
-                                    print("Error updating document: \(err)")
-                                } else {
-                                    print("Document successfully updated")
-                                }
-                            }
-                            
-                        }
-                    }
+            var ref: DocumentReference? = nil
+            var title = ""
+            var sub = ""
+            var city = ""
+            var state = ""
+            
+            if let safetitle = safeAnnotation.title  {
+                title = safetitle ?? "Place name not available"
+            }
+            if let safesub = safeAnnotation.subtitle {
+                sub = safesub ?? "Description not available"
+            }
+            
+            if let safeCity = safePin.locality {
+                city = safeCity
+            }
+            if let safeState = safePin.administrativeArea {
+                state = safeState
+            }
+            ref = db.collection("locations").addDocument(data: [
+                "gp": gp,
+                "dateAdded": FieldValue.serverTimestamp(),
+                "title": title,
+                "subtitle": sub,
+                "city": city,
+                "state": state,
+                
+//                "description": safeAnnotation.description,
+                "tripID": selectedTrip!
+            ]) { err in
+                if let err = err {
+                    print("Error adding document: \(err)")
+                } else {
+                    print("Document added with ID: \(ref!.documentID)")
+                    print(Location(gp: CLLocation(latitude: gp.latitude, longitude: gp.longitude), title: title, subtitle:sub, id: self.selectedTrip!, city: city, state: state))
                 }
-            
-            
-            
-            
+            }
         }
     }
 }
@@ -709,3 +525,4 @@ extension TripEventsViewController: UITextFieldDelegate {
         return true
     }
 }
+

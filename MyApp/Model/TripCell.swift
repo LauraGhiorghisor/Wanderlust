@@ -10,11 +10,11 @@ import Foundation
 import UIKit
 
 struct TripCell {
+    
     var itemTitle: String? = ""
     var itemContent: Any? = nil
     var itemImage: String? = ""
     var stats: Int = 0
     var alreadyVoted: Bool = false
-    
     
 }

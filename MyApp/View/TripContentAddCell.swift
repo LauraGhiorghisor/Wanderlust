@@ -34,19 +34,19 @@ class TripContentAddCell: UITableViewCell {
         // Configure the view for the selected state
         
     }
-    @objc func handleDatePicker(sender: UIDatePicker) {
-        
-        let df = DateFormatter()
-        df.dateFormat = "dd-MM-yyyy"
-        addTF.text = df.string(from: sender.date)
-        
-    }
+//    @objc func handleDatePicker(sender: UIDatePicker) {
+//
+//        let df = DateFormatter()
+//        df.dateFormat = "dd-MM-yyyy"
+//        addTF.text = df.string(from: sender.date)
+//
+//    }
     
-    
+
     // this will update all cells. 
     @IBAction func goButtonTapped(_ sender: UIButton) {
         
-        sender.viewContainingController()?.performSegue(withIdentifier: K.tripContentToEvents, sender: self)
+        sender.viewContainingController()?.performSegue(withIdentifier: K.tripContentToNotes, sender: self)
     }
 }
 

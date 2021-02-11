@@ -15,25 +15,42 @@ struct K {
 
     
     // Segues
-    static let registerToLoginSegue = "RegisterToLogin"
+//    static let registerToLoginSegue = "RegisterToLogin"
+    static let registerToTrips = "RegisterToTrips"
     static let singOutToLogin = "SignOutToLogin"
     static let loginToTabs = "LoginToTabs"
     static let chatToMsg = "ChatToMessages"
 //    static let msgToChat = "MsgToChat"
 //    static let tripsToNewTrip = "TripsToNewTrip"
     static let tripsToTripContent = "TripsToTripContent"
+    static let tripsToVotingClosed = "TripsToVotingClosed"
      static let tripsToNewTrip =  "TripsToNewTrip"
     static let tripContentToLocation = "TripContentToLocation"
     static let tripContentToEvents = "TripContentToEvents"
     static let tripToCompletedTrip =  "TripToCompletedTrip"
-    static let eventsToNewEvent = "EventsToNewEvent"
     static let startToNewTrip = "StartToNewTrip"
+    static let startToModalUpgrade = "StartToModalUpgrade"
     static let openToVoted = "OpenToVoted"
     static let votedToEvents = "VotedToEvents"
+    
     // new trip
     static let newTripToTripContent = "NewTripToTripContent"
+    static let tripContentToNotes = "TripContentToNotes"
+    static let settingsToAccount = "SettingsToAccount"
     
     
+    // modal
+    static let contentToAddPeopleModal = "ContentToAddPeopleModal"
+    static let votedToAddPeopleModal = "VotedToAddPeopleModal"
+    static let votedToUpgradeModal = "VotedToUpgradeModal"
+    
+    //settings
+    static let settingsToReportAProblem = "SettingsToReportAProblem"
+    static let settingsToTC = "SettingsToTC"
+    
+    static let eventCellToMap = "EventCellToMap"
+    static let eventsToNewEvent = "EventsToNewEvent"
+    static let viewAllToEvents = "ViewAllToEvents"
     // For the chat functionality
     static let tripsCellIdentifier = "TripsReusableCell"
     static let msgCellIdentifier = "MsgReusableCell"
@@ -67,6 +84,11 @@ struct K {
     static let newTripShowParticipantsNibName = "NewTripShowParticipantsCell"
     static let newTripShowParticipantsCellIdentifier = "NewTripShowParticipantsCellIdentifier"
     
+    
+    // alert
+    static let alertCellNibName = "AlertCell"
+    static let alertCellIdentifier = "AlertCellIdentifier"
+    
     // bg collection
     static let bgCellIdentifier = "BGCellIdentifier"
     static let bgCollectionViewCellNibName = "BGCollectionViewCell"
@@ -80,6 +102,11 @@ struct K {
     struct CorporateColours {
         static let orange = "BrandOrange"
         static let grey = "BrandGrey"
+        static let teal = "BrandTeal"
+        static let green = "BrandGreen"
+        static let black = "BrandBlack"
+        static let brightOrange = "BrandBrightOrange"
+        static let darkTeal = "BrandDarkTeal"
     }
     
     struct FStore {
@@ -89,4 +116,28 @@ struct K {
         static let dateField = "date"
         static let tripParentField = "trip"
     }
+    
+    struct status {
+        static let brainstormingOpen = "Brainstorming open"
+        static let votingOpen = "Voting open"
+        static let votingClosed = "Voting closed"
+    }
+    struct alert {
+        static let pending = "pending"
+        static let accepted = "accepted"
+        static let declined = "declined"
+    }
+    
+    
+    static let chatTripCellNib = "ChatTripCell"
+    static let chatTripCellIdentifier = "chatTripCellIdentifier"
+    
+    static let loggedInCellNib = "LoggedInCell"
+    static let loggedInCellIdentifier = "LoggedInCellIdentifier"
+    
+    static let settingsCellNib = "SettingsCell"
+    static let settingsCellIdentifier = "SettingsCellIdentifier"
+    
+    static let tripMojiCell = "TripMojiCell"
+    static let tripMojiCellNibName = "TripMojiCell"
 }

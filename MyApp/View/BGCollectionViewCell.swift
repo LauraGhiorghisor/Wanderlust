@@ -17,6 +17,7 @@ class BGCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
     }
 
 //    override func select(_ sender: Any?) {

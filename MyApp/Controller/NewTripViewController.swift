@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 
 class NewTripViewController: UIViewController {
-
+    
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var tripNameTF: UITextField!
@@ -21,26 +21,22 @@ class NewTripViewController: UIViewController {
     
     @IBOutlet weak var scrollVIew: UIScrollView!
     
+    @IBOutlet weak var brainstormingDP: UIDatePicker!
+    
+    @IBOutlet weak var votingDP: UIDatePicker!
+    
     
     let db = Firestore.firestore()
     var newTrip: String? = nil
+    let df = DateFormatter()
     
-    // so must make tv and do select for collection view and then submit
-    
-    // image picker
-//
-//    let imagePicker = UIImagePickerController()
-//    imagePicker.delegate = self
-//    imagePicker.sourceType = UIImagePickerControllerSourceType.camera
-//    imagePicker.allowsEditing = false
-//    self.present(imagePicker, animated: true, completion: nil)
+    var brainDate: String?
+    var votingDate: String?
     
     
+    //    var participants: [String] = ["user1@gmail.com", "user2@gmail.com", "Mariaaaa", "you've got to see heeer", "user1@gmail.com", "user2@gmail.com", "Mariaaaa", "you've got to see heeer"]
     
-    
-//    var participants: [String] = ["user1@gmail.com", "user2@gmail.com", "Mariaaaa", "you've got to see heeer", "user1@gmail.com", "user2@gmail.com", "Mariaaaa", "you've got to see heeer"]
-    
-     var participants: [String] = [] {
+    var participants: [String] = [] {
         didSet {
             
             DispatchQueue.main.async {
@@ -48,23 +44,23 @@ class NewTripViewController: UIViewController {
                 self.tableView.reloadData()
                 
                 if self.participants.count > 1 {
-                let index = IndexPath(row: self.participants.count, section: 0)
-                self.tableView.scrollToRow(at: index, at: .bottom, animated: true)
+                    let index = IndexPath(row: self.participants.count, section: 0)
+                    self.tableView.scrollToRow(at: index, at: .bottom, animated: true)
                 }
-                    let hConst = self.tableView.frame.height + 44
-                    self.tableView.removeConstraint(self.tvHeight)
+                let hConst = self.tableView.frame.height + 44
+                self.tableView.removeConstraint(self.tvHeight)
                 self.tvHeight = self.tableView.heightAnchor.constraint(equalToConstant: hConst)
-                        
+                
                 self.tvHeight.isActive = true
                 self.scrollVIew.setContentOffset(CGPoint(x: self.scrollVIew.contentOffset.x, y: self.scrollVIew.contentOffset.y + 44), animated: true)
             }
-
+            
         }
-     }
+    }
     
     var backgrounds: [UIImage] = [UIImage(named: "bg1")!, UIImage(named: "bg2")!, UIImage(named: "bg3")!, UIImage(named: "bg4")!]
     var buttonsStates: [Bool] = [false, true, true, true]
-    var selectedBG: Int? = 0
+    var selectedBG: Int = 1
     
     
     override func viewDidLoad() {
@@ -72,11 +68,14 @@ class NewTripViewController: UIViewController {
         super.viewDidLoad()
         if let safeUser = Auth.auth().currentUser {
             self.participants.append(safeUser.email!)
+            tripNameTF.autocapitalizationType = .words
         }
         
         // TF delegate
         tripNameTF.delegate = self
-    
+        tripNameTF.autocapitalizationType = .words
+        tripNameTF.becomeFirstResponder()
+        
         tableView.dataSource = self
         tableView.delegate = self
         bgCollectionView.dataSource = self
@@ -88,87 +87,209 @@ class NewTripViewController: UIViewController {
         tableView.register(UINib(nibName: K.newTripShowParticipantsNibName, bundle: nil), forCellReuseIdentifier: K.newTripShowParticipantsCellIdentifier)
         
         bgCollectionView.register(UINib(nibName: K.bgCollectionViewCellNibName, bundle: nil), forCellWithReuseIdentifier: K.bgCollectionViewCellIdentifier)
-  
+        
+        
+        df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        
+        
+        
+        //        self.view.insetsLayoutMarginsFromSafeArea = false
+        //        sview.insetsLayoutMarginsFromSafeArea = false
+        
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        navigationController?.isNavigationBarHidden = false
     }
     
-
+    
+    @IBAction func handleBrainningDP(_ sender: UIDatePicker) {
+        print("IN PICKER")
+        print("\(sender.date)")
+        brainDate = df.string(from: sender.date)
+    }
+    
+    @IBAction func handleVotingDP(_ sender: UIDatePicker) {
+        print("\(sender.date)")
+        votingDate = df.string(from: sender.date)
+    }
+    
+    
+    
+    // Reminder: to create an array of colors to randomize them
     @IBAction func createNewTrip(_ sender: UIButton) {
         
-        
-        // this must really check for not empty or maybe do an update instead of create not sure
-        // NAME can stay as upcoming trip?
-        // votes munst be removeed
-        
-        var bgName: String = "bg1"
         var tripName: String = tripNameTF.text!
         
-        if let safeBG = selectedBG {
+        if tripName == ""  {
+            print("THry are empty")
             
-             bgName = "bg" + String(describing: safeBG)
-        } else {
-            // NO bg selected - inform user
-             
+            let alert = UIAlertController(title: "Warning!", message: "Some fields are empty. Your trip will get default values.", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Use Defaults", style: .destructive, handler: { (action) in
+                
+         
+                if tripName == "" {    tripName = "Upcoming trip"}
+                
+                self.writeNewTripToDB(trip: tripName)
+  
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (action) in
+                return
+            }))
+            self.present(alert,animated: true)
+            return
         }
+        
+        writeNewTripToDB(trip: tripName)
+    }
+    
+    
+    func writeNewTripToDB(trip: String) {
+        var bgName: String = "bg1"
+//        var tripName: String = tripNameTF.text!
+        var color: String = K.CorporateColours.teal
+        
+        let today = Date()
+        var finalBrainDate: Date = Calendar.current.date(byAdding: .day, value: 7, to: today)!
+        var finalVotingDate: Date = Calendar.current.date(byAdding: .day, value: 14, to: today)!
+        
+        
+        
+        bgName = "bg\(selectedBG)"
+        switch selectedBG {
+        case 1: color = K.CorporateColours.orange
+        case 2: color = K.CorporateColours.brightOrange
+        case 3: color = K.CorporateColours.grey
+        case 4: color = K.CorporateColours.darkTeal
+        default: color = K.CorporateColours.teal
+        }
+        
+        
+        if let bD = brainDate {
+            finalBrainDate = df.date(from: bD)!
             
-            if tripNameTF.text == "" {
-                 tripName = "Upcoming trip"
-            }
+        }
+        
+        if let vD = votingDate {
+            finalVotingDate = df.date(from: vD)!
             
-        if let user = Auth.auth().currentUser?.email {
-                let newTripRef = db.collection("trips").document()
+        }
+        
+        guard let user = Auth.auth().currentUser?.email else { return}
+        
+        var invitees = participants
+        invitees.removeFirst(1)
+        
+        
+        
+        let  newTripRef = db.collection("trips").document()
         //            print(newTripRef.documentID)
-                newTripRef.setData([
-                    "bgImage": bgName,
-                    "calculated": false,
-                    "color": "BrandOrange",
-                    "dateAdded": FieldValue.serverTimestamp(),
-                    "endDate": [
-                    ],
-                     "events" : "reference here",
-                     "leader": user,
-                     "locations": [
+        newTripRef.setData([
+            //                    user: FieldValue.serverTimestamp(),
+            "bgImage": bgName,
+            "calculated": false,
+            "color": color,
+            "dateAdded": FieldValue.serverTimestamp(),
+            "endDate": [
+            ],
+            "events" : "reference here",
+            "leader": user,
+            "locations": [
+                
+            ],
+            "name": trip,
+            "noParticipants": 1,
+            "participants": [
+                [
+                    "name" : "New User",
+                    "email": user
+                ]
+            ],
+            "participantsEmailsArray": [
+                user
+            ],
+            "participantsNamesArray": [
+                "New User"
+            ],
+            "startDate": [
+                
+            ],
+            "tune": [
+                
+                
+            ],
+            "status": K.status.brainstormingOpen,
+            "brainingDateEnd" : finalBrainDate,
+            "votingDateEnd": finalVotingDate,
+            "invitees": invitees
+            
+        ]) { (error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                
+            }
+        }
+        self.newTrip = newTripRef.documentID
         
-                     ],
-                    "name":
-                        [
-                            [
-                                "name" : tripName,
-                                "votes": 0,
-                                "voters": []
-                            ]
-                    ],
+        let newUserTrip = db.collection("userTrips").document()
+        newUserTrip.setData(
+            [
+                "tripID" : newTripRef.documentID,
+                "user": user,
+                "dateAdded": FieldValue.serverTimestamp(),
+                "bgImage": bgName,
+                "color": color,
+                "leader": user,
+                "name": trip,
+                "status": K.status.brainstormingOpen,
+                
+            ]
+        ){ (error) in
+            if let e = error {
+                print(e.localizedDescription)
+            } else {
+                //
+            }
+        }
         
-                    "noParticipants": 1,
-                    "participants": [
-                        [
-                            "name" : "New User",
-                            "email": user
-                        ]
-                    ],
-                    "participantsEmailsArray": [
-                        user
-                    ],
-                    "participantsNamesArray": [
-                        "New User"
-                    ],
-                    "startDate": [
-        
-                    ],
-                    "tune": [
-        
-        
-                    ]
-                ]) { (error) in
-                    if let e = error {
-                        print(e.localizedDescription)
-                    } else {
-                        self.newTrip = newTripRef.documentID
-                        self.dismiss(animated: true, completion: nil)
-                    }
+        //        Creates the notifications for all the people invited
+        for invitee in invitees {
+            let newAlert = db.collection("alerts").document()
+            newAlert.setData([
+                //alert
+                "tripID": self.newTrip!,
+                "sender": user,
+                "tripName": trip,
+                "receiver": invitee,
+                "alertStatus": K.alert.pending,
+                "alertDateAdded": FieldValue.serverTimestamp(),
+                "bgImage": bgName,
+                "color": color,
+                "leader": user,
+                "tripStatus": K.status.brainstormingOpen
+                
+                
+            ]) { (error) in
+                if let e = error {
+                    print(e.localizedDescription)
+                } else {
                 }
             }
         }
+        
+        
+        
+        DispatchQueue.main.async {
+            if  let vc =  self.presentingViewController as? TripsViewController {
+                
+                vc.tripsCollectionView.reloadData()
+                vc.tripsCollectionView.flashScrollIndicators()
+            }
+        }
+        self.dismiss(animated: true, completion: nil)
     }
+}
 
 
 //MARK: - Table view Data source
@@ -180,34 +301,24 @@ extension NewTripViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.participants.count + 1
-       
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-       
+        
+        
         
         if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: K.newTripAddParticipantsCellIdentifier, for: indexPath) as! NewTripAddParticipantsCell
             return cell
         }
-        if indexPath.row == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: K.newTripShowParticipantsCellIdentifier, for: indexPath) as! NewTripShowParticipantsCell
-            cell.participantTF.text = self.participants[indexPath.row]
-            cell.participantTF.tintColor = UIColor.systemGray
-            cell.participantTF.isEnabled = false
-//            cell.participantTF.borderStyle = .none
-            return cell
-        }
         
-            let cell = tableView.dequeueReusableCell(withIdentifier: K.newTripShowParticipantsCellIdentifier, for: indexPath) as! NewTripShowParticipantsCell
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.newTripShowParticipantsCellIdentifier, for: indexPath) as! NewTripShowParticipantsCell
         cell.participantTF.text = self.participants[indexPath.row]
-//        tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
-            return cell
+        cell.participantTF.isEnabled = false
         
-        
-        
-       
+        return cell
     }
     
     
@@ -216,7 +327,7 @@ extension NewTripViewController: UITableViewDataSource {
 //MARK: - TV delegate
 
 extension NewTripViewController: UITableViewDelegate {
-// dont know man
+ 
 }
 
 //MARK: - Collection viwe data source
@@ -229,6 +340,7 @@ extension NewTripViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.bgCollectionViewCellIdentifier, for: indexPath) as! BGCollectionViewCell
         
         cell.bg.image = backgrounds[indexPath.row]
+        cell.bg.layer.cornerRadius = 15.0
         cell.selectedButton.isHidden = buttonsStates[indexPath.row]
         //true maybe?
         return cell
@@ -249,20 +361,20 @@ extension NewTripViewController: UICollectionViewDelegate {
             
             for i in buttonsStates.indices {
                 if i != indexPath.row {
-                   buttonsStates[i] = true // all other are hidden
+                    buttonsStates[i] = true // all other are hidden
                 }
             }
         } else {
             // it is false - it appears
             buttonsStates[indexPath.row] = true // is hidden
-            selectedBG = nil
+            //            selectedBG = nil
         }
         
-                DispatchQueue.main.async {
-                    self.bgCollectionView.reloadData()
-                    
-                }
-       
+        DispatchQueue.main.async {
+            self.bgCollectionView.reloadData()
+            
+        }
+        
     }
     
 }

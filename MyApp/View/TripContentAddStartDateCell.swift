@@ -21,19 +21,35 @@ class TripContentAddStartDateCell: UITableViewCell {
             print("ALL SET")
         }
     }
+    var startDate: Date?
+    
+    @IBOutlet weak var datePicker: UIDatePicker!
+  
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         addTF.delegate = self
         
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = .date
-        datePicker.tintColor = UIColor.systemOrange
-        datePicker.backgroundColor = UIColor.systemOrange
-        addTF.inputView = datePicker
+//        datePicker.datePickerMode = .date
+//        if addTF.text == "" {
+//            addTF.inputView = datePicker
+//        }
+//        else {
+//            addTF.inputView = nil
+//        }
+        
         datePicker.addTarget(self, action: #selector(handleDatePicker), for: .valueChanged)
-        df.dateFormat = "dd-MM-yyyy"
+//        datePicker.isHidden = true
+       
+//        if let bgView = datePicker.subviews.first?.subviews.first?.subviews.first {
+//
+//            bgView.backgroundColor = .clear
+//        }
+        datePicker.backgroundColor = .clear
+        for view in datePicker.subviews {
+            view.backgroundColor = .clear
+        }
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -42,8 +58,13 @@ class TripContentAddStartDateCell: UITableViewCell {
     }
     
     @objc func handleDatePicker(sender: UIDatePicker) {
-
-        addTF.text = df.string(from: sender.date)
+        df.dateFormat = "dd-MM-yyyy"
+//        addTF.text = df.string(from: sender.date)
+        startDate = sender.date
+        addTF.inputView = nil
+        addTF.resignFirstResponder()
+        addTF.becomeFirstResponder()
+  
     }
     
 }
@@ -54,15 +75,20 @@ extension TripContentAddStartDateCell: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         textField.resignFirstResponder()
     }
+//    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+//        datePicker.isHidden = false
+//        return true
+//    }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
         let sdRef = db.collection("trips").document(TripContentAddStartDateCell.selectedTrip!)
-        if let date = df.date(from: addTF.text!) {
+
+//        check if date is ok
+//        if (addTF.text != "") {
             sdRef.updateData([
                 "startDate": FieldValue.arrayUnion(
                     [
                         [
-                            "date" : date,
+                            "date" : startDate,
                             "votes": 0,
                             "voters": []
                         ]
@@ -75,9 +101,16 @@ extension TripContentAddStartDateCell: UITextFieldDelegate {
                 }
             }
             addTF.text = ""
-        } else {
+            datePicker.datePickerMode = .date
+            addTF.inputView = datePicker
+            datePicker.addTarget(self, action: #selector(handleDatePicker), for: .valueChanged)
+//        } else {
             // input check here toaster to alert of error?
-        }
+//        }
+        addTF.resignFirstResponder()
+        datePicker.resignFirstResponder()
+//        datePicker.isHidden = true
+        print(datePicker.subviews.first?.subviews.first?.subviews.first )
         return true
         
     }

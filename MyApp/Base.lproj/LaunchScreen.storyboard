@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -34,6 +33,7 @@
                                             <constraint firstAttribute="height" constant="70" id="9wp-zf-tgx"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="45"/>
+                                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <pageControl opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="mIU-oX-gU4">
@@ -61,18 +61,19 @@
                             </stackView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bus1" translatesAutoresizingMaskIntoConstraints="NO" id="LmQ-WU-DMh">
                                 <rect key="frame" x="50" y="80" width="314" height="220"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="220" id="zxe-bA-sGK"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="LmQ-WU-DMh" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="80" id="3j0-pw-DMN"/>
                             <constraint firstItem="LmQ-WU-DMh" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="6nF-ot-HeJ"/>
                             <constraint firstItem="oIz-E8-jes" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Htj-db-R7f"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="LmQ-WU-DMh" secondAttribute="trailing" constant="50" id="Kkp-qf-CiW"/>
+                            <constraint firstItem="oIz-E8-jes" firstAttribute="top" secondItem="LmQ-WU-DMh" secondAttribute="bottom" constant="8" symbolic="YES" id="YCB-M2-yvz"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="oIz-E8-jes" secondAttribute="trailing" id="r2G-jS-P3E"/>
                             <constraint firstItem="oIz-E8-jes" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="xXT-yN-udv"/>
                         </constraints>
@@ -80,13 +81,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="52.173913043478265" y="375"/>
+            <point key="canvasLocation" x="52.173913043478265" y="374.18478260869568"/>
         </scene>
     </scenes>
     <resources>
-        <image name="bus1" width="570" height="570"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="bus1" width="185" height="176"/>
     </resources>
 </document>

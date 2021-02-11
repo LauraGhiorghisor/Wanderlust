@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,7 +18,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dCi-s8-PXm">
-                        <rect key="frame" x="40" y="13" width="245" height="18.5"/>
+                        <rect key="frame" x="47" y="13" width="238" height="18.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
@@ -48,7 +48,7 @@
                     <constraint firstAttribute="trailing" secondItem="xHH-jY-8n9" secondAttribute="trailing" id="96U-Un-ypZ"/>
                     <constraint firstItem="pPu-OG-1oJ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="I56-Qr-ZqK"/>
                     <constraint firstItem="xHH-jY-8n9" firstAttribute="leading" secondItem="dCi-s8-PXm" secondAttribute="trailing" constant="5" id="UYU-Ex-65d"/>
-                    <constraint firstItem="dCi-s8-PXm" firstAttribute="leading" secondItem="pPu-OG-1oJ" secondAttribute="trailing" constant="10" id="VVc-gj-1zH"/>
+                    <constraint firstItem="dCi-s8-PXm" firstAttribute="leading" secondItem="pPu-OG-1oJ" secondAttribute="trailing" constant="17" id="VVc-gj-1zH"/>
                     <constraint firstItem="pPu-OG-1oJ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="gBq-O3-VLo"/>
                     <constraint firstItem="dCi-s8-PXm" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="rRX-EC-Oxp"/>
                     <constraint firstItem="xHH-jY-8n9" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="ysb-6I-GEd"/>

@@ -57,10 +57,12 @@ class RegisterViewController: UIViewController {
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destinationVC = segue.destination as? LoginViewController {
-            destinationVC.email = emailTF.text
-            destinationVC.password = passTF.text
-        }
+//        if let destinationVC = segue.destination as? LoginViewController {
+//            print("IN prepare")
+//            print(Auth.auth().currentUser?.displayName)
+//            destinationVC.email = emailTF.text
+//            destinationVC.password = passTF.text
+//        }
         
     }
     
@@ -68,70 +70,62 @@ class RegisterViewController: UIViewController {
     
     
     @IBAction func register(_ sender: UIButton) {
-
-        if let email = emailTF.text, let password = passTF.text, let confPass = confirmPassTF.text {
-            if (String(password) == String(confPass)) {
-                
-                Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-                    //            print(authResult?.additionalUserInfo?.providerID)
-                    //            print(authResult?.credential?.provider)
-                    if let e = error {
-                        print(e.localizedDescription)
-                        //must add pop with errors
-                    } else {
-                        print("reg ok")
-//                        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-//
-//                            if let e = error {
-//                                print(e.localizedDescription)
-//                                //must add pop with errors
-//                            } else { // navigate to controller
-//                                print("log in ok")
-//
-//                                Auth.auth().currentUser?.sendEmailVerification { (error) in
-//                                    if let e = error {
-//                                        print("User has not confirmed email", e.localizedDescription)
-//                                        // Display an error message saying must confirm email!!!!!!!
-//                                    } else {
-//                                        print("user has confirmed")
-//
-//                                        let firebaseAuth = Auth.auth()
-//                                        do {
-//                                            try firebaseAuth.signOut()
-//
-//                                        } catch let signOutError as NSError {
-//                                            print ("Error signing out: %@", signOutError)
-//                                        }
-//                                        // go to login page + set up log in and pass data
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        // might need to go straight to trips , user seems to be logged in after registration.
-                                       
-                                        self.performSegue(withIdentifier: K.registerToLoginSegue, sender: self)
-                                        
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-                    
-                }
-            }
-                }
+        
+        if emailTF.text! != "" && passTF.text! != "" && passTF.text! != "" && confirmPassTF.text! != "" {
+            if emailTF.text!.contains("@") {
+                if (passTF.text!.count >= 6) {
+                    if passTF.text! == confirmPassTF.text! {
+                        Auth.auth().createUser(withEmail: emailTF.text!, password: passTF.text!) { authResult, error in
+                            
+                            if let e = error {
+                                print(e.localizedDescription)
+                            } else {
+                                print("in register - updatign the user profile")
+                                let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+                                changeRequest?.displayName = self.nameTF.text!
+                                changeRequest?.commitChanges { (error) in
+                                  // ...
+                                }
+                                
+                                
+                                self.performSegue(withIdentifier: K.registerToTrips, sender: self)
+                            }
+                        }
+                    }
                     else {
-                print("not the  same")
+                        // passowrds don't match
+                        let alert = UIAlertController(title: "Oops...", message: "Your passwords do not match. Please try again!", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                            return
+                        }))
+                        self.present(alert, animated: true)
+                    }
+                } else {
+                    // pass must be longer than 6 characters
+                    let alert = UIAlertController(title: "Oops...", message: "Your password must be at least 6 characters long. Please try again!", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                        return
+                    }))
+                    self.present(alert, animated: true)
+                }
+            } else {
+                let alert = UIAlertController(title: "Oops...", message: "The email address is badly formatted. Please try again!", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                    return
+                }))
+                self.present(alert, animated: true)
             }
         }
         else {
-            print("not resigestering")
+            // must fill in fields
+            let alert = UIAlertController(title: "Oops...", message: "Some fields are empty. Please try again!", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+                return
+            }))
+            self.present(alert, animated: true)
+        }
         
-    }
-
+//        print(Auth.auth().currentUser?.displayName)
     }
 }
 
@@ -139,7 +133,7 @@ class RegisterViewController: UIViewController {
 extension RegisterViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-
+        
         if textField == nameTF {
             emailTF.becomeFirstResponder()
         }
@@ -156,5 +150,5 @@ extension RegisterViewController: UITextFieldDelegate {
         }
         return true
     }
-   
+    
 }

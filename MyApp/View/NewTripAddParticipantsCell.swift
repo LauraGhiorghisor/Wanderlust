@@ -72,7 +72,9 @@ extension NewTripAddParticipantsCell: UITextFieldDelegate {
 //        }
         if let vc =  self.parentContainerViewController() as? NewTripViewController {
             vc.participants.append(addTF.text!)
-//            vc.tableView.frame. += 40
+        }
+        if let vc =  self.parentContainerViewController() as? AddParticipantsModalViewController {
+            vc.participants.append(addTF.text!)
         }
 //        NewTripViewController.participants.append(addTF.text!)
 
