@@ -17,6 +17,8 @@ class ChatViewController: UIViewController {
     let db = Firestore.firestore()
     @IBOutlet weak var emptyView: UIView!
     
+    @IBOutlet weak var tipsBtn: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -27,11 +29,25 @@ class ChatViewController: UIViewController {
         
         tripsTV.register(UINib(nibName: K.chatTripCellNib , bundle: nil), forCellReuseIdentifier: K.chatTripCellIdentifier)
         
+        if UserDefaults.standard.bool(forKey: "tips") == true {
+                tipsBtn.isHidden = false
+            } else {
+                tipsBtn.isHidden = true
+            }
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         navigationController?.isNavigationBarHidden = true
         load()
+    }
+    
+    
+    @IBAction func tipsBtnTapped(_ sender: UIButton) {
+        
+        let alert = UIAlertController(title: "Tip!", message: "The chats associated with your trip groups will appear here.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true)
     }
     
     // check i dont want real time updates?

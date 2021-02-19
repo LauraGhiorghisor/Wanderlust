@@ -301,8 +301,7 @@ private func randomNonceString(length: Int = 32) -> String {
 //MARK: - Sign in with Apple delegate
 @available(iOS 13.0, *)
 extension LoginViewController: ASAuthorizationControllerDelegate {
-    /// - Tag: did_complete_authorization
-
+   
       func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
           guard let nonce = currentNonce else {
@@ -326,7 +325,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
               // Error. If error.code == .MissingOrInvalidNonce, make sure
               // you're sending the SHA256-hashed nonce as a hex string with
               // your request to Apple.
-                print(error?.localizedDescription)
+                print(error?.localizedDescription as Any)
               return
             }
             // User is signed in to Firebase with Apple.

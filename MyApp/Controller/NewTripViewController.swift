@@ -32,15 +32,12 @@ class NewTripViewController: UIViewController {
     
     var brainDate: String?
     var votingDate: String?
-    
-    
-    //    var participants: [String] = ["user1@gmail.com", "user2@gmail.com", "Mariaaaa", "you've got to see heeer", "user1@gmail.com", "user2@gmail.com", "Mariaaaa", "you've got to see heeer"]
-    
+
     var participants: [String] = [] {
         didSet {
             
             DispatchQueue.main.async {
-                print("i am in did set")
+               
                 self.tableView.reloadData()
                 
                 if self.participants.count > 1 {
@@ -62,6 +59,7 @@ class NewTripViewController: UIViewController {
     var buttonsStates: [Bool] = [false, true, true, true]
     var selectedBG: Int = 1
     
+    @IBOutlet weak var tipBtn: UIButton!
     
     override func viewDidLoad() {
         
@@ -92,9 +90,12 @@ class NewTripViewController: UIViewController {
         df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
         
         
-        
-        //        self.view.insetsLayoutMarginsFromSafeArea = false
-        //        sview.insetsLayoutMarginsFromSafeArea = false
+        if UserDefaults.standard.bool(forKey: "tips") == true {
+                tipBtn.isHidden = false
+            } else {
+                tipBtn.isHidden = true
+            }
+            
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -102,6 +103,12 @@ class NewTripViewController: UIViewController {
         navigationController?.isNavigationBarHidden = false
     }
     
+    
+    @IBAction func tipBtnTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Tip!", message: "You can now give a generic name to your trip and invite a few participants, as well as select a custom background. The brainstorming and voting require an end date selection. If no selection is put through the trip will be automatically titled Upcoming trip and the durations for brainstorming and voting will be one week each.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true)
+    }
     
     @IBAction func handleBrainningDP(_ sender: UIDatePicker) {
         print("IN PICKER")
@@ -361,22 +368,18 @@ extension NewTripViewController: UICollectionViewDelegate {
             
             for i in buttonsStates.indices {
                 if i != indexPath.row {
-                    buttonsStates[i] = true // all other are hidden
+                    buttonsStates[i] = true // all others are hidden
                 }
             }
         } else {
             // it is false - it appears
             buttonsStates[indexPath.row] = true // is hidden
-            //            selectedBG = nil
         }
         
         DispatchQueue.main.async {
             self.bgCollectionView.reloadData()
-            
         }
-        
     }
-    
 }
 
 

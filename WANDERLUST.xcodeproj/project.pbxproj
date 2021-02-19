@@ -40,11 +40,11 @@
 		D3BC25E225BB52F200C42876 /* ChatTripCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BC25E025BB52F200C42876 /* ChatTripCell.swift */; };
 		D3BC25E325BB52F200C42876 /* ChatTripCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3BC25E125BB52F200C42876 /* ChatTripCell.xib */; };
 		D3BC25E825BBA54F00C42876 /* StandardNewTripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BC25E725BBA54F00C42876 /* StandardNewTripViewController.swift */; };
+		D3BD8FED25D8788D00B03C47 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3BD8FEC25D8788D00B03C47 /* GoogleService-Info.plist */; };
+		D3BD8FEE25D8788D00B03C47 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3BD8FEC25D8788D00B03C47 /* GoogleService-Info.plist */; };
+		D3BD8FEF25D8788D00B03C47 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3BD8FEC25D8788D00B03C47 /* GoogleService-Info.plist */; };
 		D3C06243251141C300034C93 /* TripContentAddNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C06241251141C300034C93 /* TripContentAddNameCell.swift */; };
 		D3C06244251141C300034C93 /* TripContentAddNameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3C06242251141C300034C93 /* TripContentAddNameCell.xib */; };
-		D3C47BC425D5D671008B7B63 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3C47BC325D5D671008B7B63 /* GoogleService-Info.plist */; };
-		D3C47BC525D5D671008B7B63 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3C47BC325D5D671008B7B63 /* GoogleService-Info.plist */; };
-		D3C47BC625D5D671008B7B63 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3C47BC325D5D671008B7B63 /* GoogleService-Info.plist */; };
 		D3C5D81B25097EF2003BED82 /* NewTripAddParticipantsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C5D81925097EF2003BED82 /* NewTripAddParticipantsCell.swift */; };
 		D3C5D81C25097EF2003BED82 /* NewTripAddParticipantsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3C5D81A25097EF2003BED82 /* NewTripAddParticipantsCell.xib */; };
 		D3C5D81F25098299003BED82 /* TripContentAddLocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C5D81D25098299003BED82 /* TripContentAddLocationCell.swift */; };
@@ -70,6 +70,9 @@
 		D3CDCD66251FC14C0063886F /* TripEventsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDCD65251FC14B0063886F /* TripEventsListViewController.swift */; };
 		D3CDCD6C251FC1F60063886F /* TripEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CDCD6A251FC1F60063886F /* TripEventCell.swift */; };
 		D3CDCD6D251FC1F60063886F /* TripEventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3CDCD6B251FC1F60063886F /* TripEventCell.xib */; };
+		D3DB7FC225DB3EE600865FE4 /* InviteModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DB7FC125DB3EE600865FE4 /* InviteModalViewController.swift */; };
+		D3DB7FCB25DB408200865FE4 /* InviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DB7FC925DB408200865FE4 /* InviteCell.swift */; };
+		D3DB7FCC25DB408200865FE4 /* InviteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3DB7FCA25DB408200865FE4 /* InviteCell.xib */; };
 		D3E5224524F6B2F100FD88F3 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E5224424F6B2F100FD88F3 /* Message.swift */; };
 		D3E5224724F6B46C00FD88F3 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E5224624F6B46C00FD88F3 /* MessagesViewController.swift */; };
 		D3E52B6424F742C1009B8875 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E52B6224F742C1009B8875 /* MessageCell.swift */; };
@@ -147,9 +150,9 @@
 		D3BC25E025BB52F200C42876 /* ChatTripCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTripCell.swift; sourceTree = "<group>"; };
 		D3BC25E125BB52F200C42876 /* ChatTripCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatTripCell.xib; sourceTree = "<group>"; };
 		D3BC25E725BBA54F00C42876 /* StandardNewTripViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandardNewTripViewController.swift; sourceTree = "<group>"; };
+		D3BD8FEC25D8788D00B03C47 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D3C06241251141C300034C93 /* TripContentAddNameCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripContentAddNameCell.swift; sourceTree = "<group>"; };
 		D3C06242251141C300034C93 /* TripContentAddNameCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TripContentAddNameCell.xib; sourceTree = "<group>"; };
-		D3C47BC325D5D671008B7B63 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D3C5D81925097EF2003BED82 /* NewTripAddParticipantsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTripAddParticipantsCell.swift; sourceTree = "<group>"; };
 		D3C5D81A25097EF2003BED82 /* NewTripAddParticipantsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewTripAddParticipantsCell.xib; sourceTree = "<group>"; };
 		D3C5D81D25098299003BED82 /* TripContentAddLocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripContentAddLocationCell.swift; sourceTree = "<group>"; };
@@ -181,6 +184,9 @@
 		D3CDCD65251FC14B0063886F /* TripEventsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripEventsListViewController.swift; sourceTree = "<group>"; };
 		D3CDCD6A251FC1F60063886F /* TripEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripEventCell.swift; sourceTree = "<group>"; };
 		D3CDCD6B251FC1F60063886F /* TripEventCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TripEventCell.xib; sourceTree = "<group>"; };
+		D3DB7FC125DB3EE600865FE4 /* InviteModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteModalViewController.swift; sourceTree = "<group>"; };
+		D3DB7FC925DB408200865FE4 /* InviteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteCell.swift; sourceTree = "<group>"; };
+		D3DB7FCA25DB408200865FE4 /* InviteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InviteCell.xib; sourceTree = "<group>"; };
 		D3E5224424F6B2F100FD88F3 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		D3E5224624F6B46C00FD88F3 /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		D3E52B6224F742C1009B8875 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
@@ -298,7 +304,7 @@
 				D3F0D28424F1D7F800A847C1 /* View */,
 				D3F0D28524F1D80500A847C1 /* Controller */,
 				D3CA959D24F05A820096B64A /* Assets.xcassets */,
-				D3C47BC325D5D671008B7B63 /* GoogleService-Info.plist */,
+				D3BD8FEC25D8788D00B03C47 /* GoogleService-Info.plist */,
 				D35FF6AC25B8D078008910F2 /* Supporting files */,
 				D3CA959A24F05A7E0096B64A /* MyApp.xcdatamodeld */,
 				D3CA959F24F05A820096B64A /* LaunchScreen.storyboard */,
@@ -376,6 +382,8 @@
 				D3F60E3E2521FCA500E7F91A /* NewTripShowParticipantsCell.xib */,
 				D3F60E50252219D700E7F91A /* BGCollectionViewCell.swift */,
 				D3F60E51252219D700E7F91A /* BGCollectionViewCell.xib */,
+				D3DB7FC925DB408200865FE4 /* InviteCell.swift */,
+				D3DB7FCA25DB408200865FE4 /* InviteCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -407,6 +415,7 @@
 				D32A02BA25C329B2005F7856 /* UserAccountViewController.swift */,
 				D3AD4C9125D2D90000650C4F /* AddParticipantsModalViewController.swift */,
 				D39E8D3225D3484A007E3D80 /* ReportProblemViewController.swift */,
+				D3DB7FC125DB3EE600865FE4 /* InviteModalViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -523,6 +532,7 @@
 				D3BC25E325BB52F200C42876 /* ChatTripCell.xib in Resources */,
 				D3F60E402521FCA500E7F91A /* NewTripShowParticipantsCell.xib in Resources */,
 				D39B8E4625A338B9008DD46A /* AlertCell.xib in Resources */,
+				D3DB7FCC25DB408200865FE4 /* InviteCell.xib in Resources */,
 				D3C5D81C25097EF2003BED82 /* NewTripAddParticipantsCell.xib in Resources */,
 				D3E52B6524F742C1009B8875 /* MessageCell.xib in Resources */,
 				D3C5D82C25098616003BED82 /* TripContentAddEndDateCell.xib in Resources */,
@@ -537,7 +547,7 @@
 				D3C5D828250985FA003BED82 /* TripContentAddStartDateCell.xib in Resources */,
 				D39F48CC25025D7800B0F4D3 /* TripContentAddCell.xib in Resources */,
 				D3CA959E24F05A820096B64A /* Assets.xcassets in Resources */,
-				D3C47BC425D5D671008B7B63 /* GoogleService-Info.plist in Resources */,
+				D3BD8FED25D8788D00B03C47 /* GoogleService-Info.plist in Resources */,
 				D3C5D82425098543003BED82 /* TripContentAddTuneCell.xib in Resources */,
 				D3CA959924F05A7E0096B64A /* Main.storyboard in Resources */,
 			);
@@ -547,7 +557,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3C47BC525D5D671008B7B63 /* GoogleService-Info.plist in Resources */,
+				D3BD8FEE25D8788D00B03C47 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -555,7 +565,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3C47BC625D5D671008B7B63 /* GoogleService-Info.plist in Resources */,
+				D3BD8FEF25D8788D00B03C47 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,9 +715,11 @@
 				D3F60E1025215A2500E7F91A /* TitleViewController.swift in Sources */,
 				D3C5D81B25097EF2003BED82 /* NewTripAddParticipantsCell.swift in Sources */,
 				D3CA95C724F06A890096B64A /* ChatViewController.swift in Sources */,
+				D3DB7FCB25DB408200865FE4 /* InviteCell.swift in Sources */,
 				D363F63B24F3215F00533D54 /* RegisterViewController.swift in Sources */,
 				D32A02BB25C329B3005F7856 /* UserAccountViewController.swift in Sources */,
 				D3E5224524F6B2F100FD88F3 /* Message.swift in Sources */,
+				D3DB7FC225DB3EE600865FE4 /* InviteModalViewController.swift in Sources */,
 				D3F1AF402509009100D4FC88 /* TripEventsViewController.swift in Sources */,
 				D3C06243251141C300034C93 /* TripContentAddNameCell.swift in Sources */,
 				D39E8D3325D3484A007E3D80 /* ReportProblemViewController.swift in Sources */,
@@ -901,9 +913,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MyApp/MyApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 5Z3L7XJ54X;
 				INFOPLIST_FILE = MyApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -911,7 +924,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lauraghiorghisor.wanderlust2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -924,9 +937,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MyApp/MyAppRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 5Z3L7XJ54X;
 				INFOPLIST_FILE = MyApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -934,7 +948,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.lauraghiorghisor.wanderlust2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

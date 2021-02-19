@@ -92,11 +92,11 @@ class TripVotedViewController: UIViewController {
         
         navigationController?.popToRootViewController(animated: true)
         
-        //        performSegue(withIdentifier: "VotedToTrips", sender: self)
     }
     
     func load() {
-        print("IN THE LOAD METHOD")
+       
+        
         let docRef = db.collection("trips").document(selectedTrip!)
         
         docRef.getDocument { (document, error) in

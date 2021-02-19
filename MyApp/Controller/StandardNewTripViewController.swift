@@ -23,7 +23,8 @@ class StandardNewTripViewController: UIViewController {
     @IBOutlet weak var startDP: UIDatePicker!
     @IBOutlet weak var endDP: UIDatePicker!
     
-
+    @IBOutlet weak var tipsBtn: UIButton!
+    
     let df = DateFormatter()
     let db = Firestore.firestore()
     var newTrip: String? = nil
@@ -60,20 +61,27 @@ class StandardNewTripViewController: UIViewController {
   
         
         df.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        
+        
+        if UserDefaults.standard.bool(forKey: "tips") == true {
+                tipsBtn.isHidden = false
+            } else {
+                tipsBtn.isHidden = true
+            }
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         navigationController?.isNavigationBarHidden = false
     }
 
+    @IBAction func tipsBtnPressed(_ sender: UIButton) {
 
+        let alert = UIAlertController(title: "Tip!", message: "You can now create a trip for your personal use, complete with location choice and tune. In order for the location to be later translated into an actual map region, please insert relevant data. The Default Location is London. The default tune is Queen's I want to break free. The start and end dates will be automatically set to a week if no selection is made.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true)
+    }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//       if let destinationVC = segue.destination as? TripVotedViewController {
-//            destinationVC.selectedTrip = newTrip
-//
-//        }
-//    }
+
     
     @IBAction func handleBrainningDP(_ sender: UIDatePicker) {
         print("IN PICKER")

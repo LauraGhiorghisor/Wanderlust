@@ -88,7 +88,7 @@ extension TripContentAddStartDateCell: UITextFieldDelegate {
                 "startDate": FieldValue.arrayUnion(
                     [
                         [
-                            "date" : startDate,
+                            "date" : startDate as Any,
                             "votes": 0,
                             "voters": []
                         ]
@@ -110,7 +110,6 @@ extension TripContentAddStartDateCell: UITextFieldDelegate {
         addTF.resignFirstResponder()
         datePicker.resignFirstResponder()
 //        datePicker.isHidden = true
-        print(datePicker.subviews.first?.subviews.first?.subviews.first )
         return true
         
     }

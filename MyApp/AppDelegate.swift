@@ -12,6 +12,7 @@ import Firebase
 import IQKeyboardManagerSwift
 import AuthenticationServices
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -40,6 +41,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                break
 //            }
 //        }
+        
+        if UserDefaults.standard.value(forKey: "tips") == nil {
+            UserDefaults.standard.setValue(true, forKey: "tips")
+            
+        }
         return true
     }
     
@@ -67,6 +73,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     } catch let signOutError as NSError {
       print ("Error signing out: %@", signOutError)
     }
+    }
+    
+    //MARK: - Deep links set up
+    
+    func handleDynamicIncomingLink(_ dynamicLink: DynamicLink) {
+        
+        //deep link url value
+        guard let url = dynamicLink.url else {
+            print("No url. weird")
+            return
+        }
+        
+        print("the link param is \(url.absoluteString)")
+    }
+    
+    
+    
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if let incomingURL = userActivity.webpageURL {
+            print("incoming url is \(incomingURL)")
+            let linkHandled = DynamicLinks.dynamicLinks().handleUniversalLink(incomingURL) { (dynamicLink, error) in
+                guard error == nil else {
+                print("Found an error! \(error!.localizedDescription)")
+                return
+            }
+                if let dynamicLink = dynamicLink {
+                    self.handleDynamicIncomingLink(dynamicLink)
+                }
+        }
+            if linkHandled {
+                return true
+            } else {
+                //other
+                return false
+            }
+        }
+            return false
+        
+    }
+        
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        if let dynamicLink = DynamicLinks.dynamicLinks().dynamicLink(fromCustomSchemeURL: url) {
+            print("receeived through a different scheme")
+            self.handleDynamicIncomingLink(dynamicLink)
+            return true
+        } else {
+            //FB OR Google sign in
+            return false
+        }
     }
     
     // MARK: UISceneSession Lifecycle

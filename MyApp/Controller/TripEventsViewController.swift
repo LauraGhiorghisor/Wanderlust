@@ -24,7 +24,7 @@ class TripEventsViewController: UIViewController {
     
     var selectedTrip: String? {
         didSet {
-            print("trip set in events VC")
+            print("trip set")
         }
     }
     var selectedLocation: Location?
@@ -50,12 +50,12 @@ class TripEventsViewController: UIViewController {
     var spanValue: CLLocationDegrees = 0.05
     let db = Firestore.firestore()
     
-    // all annotations will be centralized, per session, in this array, with the purpose of triggering the next one when clicking.
+
     var currentAnnotations: [MKPointAnnotation] = []
     var placemarkForUserDeclaredPin: MKPlacemark?
     
     var pinImage: String?
-//    var customSearchOn = false
+    //    var customSearchOn = false
     var resultSearchController:UISearchController? = nil
     let locationManager = CLLocationManager()
     var nearbyButtonTapped = false
@@ -65,11 +65,10 @@ class TripEventsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // must initialize currentANnotations, or pass them from previous controller
+        // Initialize currentANnotations
         mapView.addAnnotations(currentAnnotations)
         
         //setting nav
-//        navigationController!.navigationBar.topItem?.title = "Events"
         navigationController!.navigationBar.tintColor = UIColor(named: "BrandTeal")
         
         // buttons
@@ -95,19 +94,17 @@ class TripEventsViewController: UIViewController {
         //delegates
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    
+        
         
         if selectedRegion == nil {
-        let location = CLLocationCoordinate2D(latitude: 51.50, longitude: 0.12)
-        let span = MKCoordinateSpan(latitudeDelta: spanValue, longitudeDelta: spanValue)
-        selectedRegion = MKCoordinateRegion(center: location, span: span)
+            let location = CLLocationCoordinate2D(latitude: 51.50, longitude: 0.12)
+            let span = MKCoordinateSpan(latitudeDelta: spanValue, longitudeDelta: spanValue)
+            selectedRegion = MKCoordinateRegion(center: location, span: span)
         }
         if selectedLocation == nil {
             zoomInOnSelectedRegion()
             
         } else {
-            print("PLACEMARK IS ")
-            print(selectedLocation)
             dropPinZoomIn(ann: selectedLocation!, zoom: true)
             
         }
@@ -116,10 +113,7 @@ class TripEventsViewController: UIViewController {
                 dropPinZoomIn(ann: loc, zoom: true)
             }
         }
-        
-        
-        
-        
+         
         // Creates the view controller with the specified identifier and initializes it with the data from the storyboard.
         let locationSearchTable = storyboard?.instantiateViewController(withIdentifier: "LocationSearchTable") as! LocationSearchTable
         
@@ -129,11 +123,8 @@ class TripEventsViewController: UIViewController {
         let searchBar = resultSearchController!.searchBar
         searchBar.sizeToFit()
         searchBar.placeholder = "Search for places"
-        //        resultSearchController?.automaticallyShowsCancelButton = false
         resultSearchController?.showsSearchResultsController = true
-        //        resultSearchController?.automaticallyShowsScopeBar = true
         navigationItem.titleView = resultSearchController?.searchBar
-        //        navigationItem.searchController = resultSearchController
         resultSearchController?.hidesNavigationBarDuringPresentation = false
         resultSearchController?.obscuresBackgroundDuringPresentation = true
         definesPresentationContext = true
@@ -144,16 +135,16 @@ class TripEventsViewController: UIViewController {
         
         mapView.delegate = self
         // Center it around the passed over value of location
-//        mapView.centerCoordinate =
+        //        mapView.centerCoordinate =
         mapView.showsCompass = true
         
         
         // Core location set up
         
-      
+        
     }
     
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         locationManager.stopUpdatingLocation()
     }
@@ -198,7 +189,7 @@ class TripEventsViewController: UIViewController {
     }
     
     
-    // https://stackoverflow.com/questions/34431459/ios-swift-how-to-add-pinpoint-to-map-on-touch-and-get-detailed-address-of-th
+    //https://stackoverflow.com/questions/34431459/ios-swift-how-to-add-pinpoint-to-map-on-touch-and-get-detailed-address-of-th
     @IBAction func mapDidTap(_ sender: UITapGestureRecognizer) {
         
         if optionsView.isHidden == false {
@@ -214,20 +205,12 @@ class TripEventsViewController: UIViewController {
         pinNameOptionsView.isHidden = true
         
         let location = sender.location(in: mapView)
-        let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+        _ = mapView.convert(location, toCoordinateFrom: mapView)
         
-        //NOT sure if needed
-        //        for ann in currentAnnotations {
-        //            print("going here")
-        //            if ann.coordinate.longitude <= coordinate.longitude + 0.001 && ann.coordinate.longitude >= coordinate.longitude - 0.001 && ann.coordinate.latitude <= coordinate.latitude + 0.001 && ann.coordinate.latitude >= coordinate.latitude - 0.001 {
-        //                print("CLICKING ON ANNOTATIOOOOON")
-        //                return
-        //            }
-        //        }
     }
     
     @IBAction func mapDidPressLong(_ sender: UILongPressGestureRecognizer) {
-        //        customSearchOn = true
+        
         pinImage = "mappin.circle"
         
         let location = sender.location(in: mapView)
@@ -244,8 +227,8 @@ class TripEventsViewController: UIViewController {
                 return
             }
             let placemark = placemarks[0]
-            if let areas = placemark.areasOfInterest, areas.count > 0, let name = placemark.name {
-                // IT MEANS there's an actual existing place
+            if let areas = placemark.areasOfInterest, areas.count > 0, let _ = placemark.name {
+                // There's an actual existing place
                 self.dropPinZoomIn(placemark: MKPlacemark(placemark: placemark), zoom: false)
                 
             } else {
@@ -261,18 +244,6 @@ class TripEventsViewController: UIViewController {
         if let safeRegion = selectedRegion {
             mapView.setRegion(safeRegion, animated: true)
         }
-//            else
-//        {
-//            locationManager.requestWhenInUseAuthorization()
-//            locationManager.requestLocation()
-//
-//            if let safeLocation = locationManager.location {
-//                let currentLocation = CLLocationCoordinate2D(latitude: safeLocation.coordinate.latitude, longitude: safeLocation.coordinate.longitude)
-//                let span = MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10)
-//                let currentRegion = MKCoordinateRegion(center: currentLocation, span: span)
-//                mapView.setRegion(currentRegion, animated: true)
-//            }
-//        }
     }
     
     @IBAction func restaurantsSearch(_ sender: UIButton) {
@@ -298,9 +269,8 @@ class TripEventsViewController: UIViewController {
     
     
     func customSearch(pinImage image: String, searchFor keyWord: String) {
-//        customSearchOn = true
+  
         pinImage = image
-        
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = keyWord
         request.region = mapView!.region
@@ -313,23 +283,18 @@ class TripEventsViewController: UIViewController {
             for place in response.mapItems {
                 self.dropPinZoomIn(placemark: place.placemark, zoom: false)
             }
-            
-            
         }
     }
-    
-    
 }
+
+//MARK: - CLLocationManagerDelegate methods
 extension TripEventsViewController : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse && nearbyButtonTapped == true {
-    locationManager.requestLocation()
+            locationManager.requestLocation()
             nearbyButtonTapped = false
         }
-//        else {
-//            locationManager.requestLocation()
-//        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -355,12 +320,10 @@ extension TripEventsViewController: HandleMapSearch {
     
     func dropPinZoomIn(placemark: MKPlacemark, zoom: Bool) {
         selectedPin = placemark
-        // clear existing pins???????
-        //         mapView.removeAnnotations(mapView.annotations)
         let annotation = MKPointAnnotation()
         annotation.coordinate = placemark.coordinate
         annotation.title = placemark.name ?? "Destination"
-      
+        
         if let city = placemark.locality {
             annotation.subtitle = "\(city)"
         }
@@ -370,7 +333,6 @@ extension TripEventsViewController: HandleMapSearch {
         if let city = placemark.locality, let state = placemark.administrativeArea {
             
             annotation.subtitle = "\(city), \(state)"
-//            let code = placemark.countryCode, let country = placemark.country, let areas = placemark.areasOfInterest, let region = placemark.region
         }
         mapView.addAnnotation(annotation)
         currentAnnotations.append(annotation)
@@ -382,12 +344,12 @@ extension TripEventsViewController: HandleMapSearch {
     }
     
     func dropPinZoomIn(ann: MKAnnotation, zoom: Bool) {
-       
+        
         let annotation = MKPointAnnotation()
         annotation.coordinate = ann.coordinate
         annotation.title = ann.title ?? "Destination"
         annotation.subtitle = ann.subtitle ?? "No description available"
-
+        
         
         mapView.addAnnotation(annotation)
         currentAnnotations.append(annotation)
@@ -405,48 +367,25 @@ extension TripEventsViewController: HandleMapSearch {
 extension TripEventsViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
-        
-print("DID ADD CALLED")
-    for view in views {
-        view.tintColor = UIColor(named: K.CorporateColours.teal)
-    }
+        for view in views {
+            view.tintColor = UIColor(named: K.CorporateColours.teal)
+        }
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         optionsView.isHidden = false
         if let ann = view.annotation {
-//            print("annotation props are \(ann.title) \(ann.subtitle) \(ann.description)")
-
-            selectedPin = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: ann.coordinate.latitude, longitude: ann.coordinate.longitude), addressDictionary: ["name": ann.title])
+            selectedPin = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: ann.coordinate.latitude, longitude: ann.coordinate.longitude), addressDictionary: ["name": ann.title as Any])
             selectedPinName = ann.title ?? "Your destination"
             selectedAnnotation = ann
         }
     }
     
-  
+    
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        print("AM I IN HERE???????????????????????????")
-        
-//        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "myAnnotation") as? MKPinAnnotationView
-        
-         let annotationView = mapView.view(for: annotation)
-//            as? MKPinAnnotationView    {
-        print("IS THIS VEING CALLED VIEW FORRRRRRRR")
-        print(annotationView?.tintColor)
+        let annotationView = mapView.view(for: annotation)
         annotationView?.tintColor = UIColor(named: K.CorporateColours.teal)
-//        annotationView.pinTintColor = UIColor(named: K.CorporateColours.teal)
-//            return annotationView
-//        }
-//
-        
-        
-//        let identifier = "Placemark"
-//
-//          // attempt to find a cell we can recycle
-//          var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
-//        annotationView?.markerTintColor = UIColor(named: K.CorporateColours.teal)
-        
         return annotationView
     }
     
@@ -454,12 +393,7 @@ print("DID ADD CALLED")
     @objc func getDirections () {
         if let selectedPin = selectedPin {
             let regionDistance:CLLocationDistance = 100
-            let regionSpan = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: selectedPin.coordinate.latitude, longitude: selectedPin.coordinate.longitude), latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
-//            let options = [
-//                MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
-//                MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)
-//            ]
-//            let launchOpt2 = [MKLaunchOptionsMapCenterKey : MKLaunchOptionsMapCenterKey]
+            _ = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: selectedPin.coordinate.latitude, longitude: selectedPin.coordinate.longitude), latitudinalMeters: regionDistance, longitudinalMeters: regionDistance)
             let mapItem = MKMapItem(placemark: selectedPin)
             mapItem.name = selectedPinName
             mapItem.openInMaps(launchOptions: nil)
@@ -469,7 +403,6 @@ print("DID ADD CALLED")
     @objc func addToFavourites() {
         
         if let safePin = selectedPin, let safeAnnotation = selectedAnnotation {
-//            let location = CLLocation(latitude: safePin.coordinate.latitude, longitude: safePin.coordinate.longitude)
             let gp = GeoPoint(latitude: safePin.coordinate.latitude, longitude: safePin.coordinate.longitude)
             
             var ref: DocumentReference? = nil
@@ -498,8 +431,6 @@ print("DID ADD CALLED")
                 "subtitle": sub,
                 "city": city,
                 "state": state,
-                
-//                "description": safeAnnotation.description,
                 "tripID": selectedTrip!
             ]) { err in
                 if let err = err {
@@ -518,7 +449,6 @@ extension TripEventsViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == pinNameTF {
-            print("pin tf OK")
             pinNameTF.resignFirstResponder()
             addToMapButton.becomeFirstResponder()
         }

@@ -15,6 +15,7 @@ class AlertsViewController: UIViewController {
     @IBOutlet weak var emptyView: UIView!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var tipsBtn: UIButton!
     let db = Firestore.firestore()
     var alerts: [Alert] = []
     
@@ -22,10 +23,23 @@ class AlertsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        if UserDefaults.standard.bool(forKey: "tips") == true {
+                tipsBtn.isHidden = false
+            } else {
+                tipsBtn.isHidden = true
+            }
+        
+        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UINib(nibName: K.alertCellNibName, bundle: nil), forCellReuseIdentifier: K.alertCellIdentifier)
         load()
+    }
+    @IBAction func tipsBtnTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Tip!", message: "The invites associated with your trip will appear here.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true)
     }
     
     func load() {

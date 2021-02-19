@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina5_5" orientation="portrait" appearance="light"/>
+    <device id="retina5_5" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
@@ -59,7 +59,7 @@
                                     <constraint firstAttribute="bottom" secondItem="14s-VT-ejp" secondAttribute="bottom" id="jEK-NK-yRN"/>
                                 </constraints>
                             </stackView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bus1" translatesAutoresizingMaskIntoConstraints="NO" id="LmQ-WU-DMh">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bus_launch" translatesAutoresizingMaskIntoConstraints="NO" id="LmQ-WU-DMh">
                                 <rect key="frame" x="50" y="80" width="314" height="220"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -85,6 +85,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bus1" width="185" height="176"/>
+        <image name="bus_launch" width="185" height="176"/>
     </resources>
 </document>

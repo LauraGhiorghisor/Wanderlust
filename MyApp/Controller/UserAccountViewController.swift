@@ -19,15 +19,19 @@ class UserAccountViewController: UIViewController {
     @IBOutlet weak var newEmailTF: UITextField!
     @IBOutlet weak var currentPassTF: UITextField!
     @IBOutlet weak var newPassTF: UITextField!
+    @IBOutlet weak var tipsBtn: UIButton!
+    
     let emojis: [UIImage] = [UIImage(named: "bus1")!, UIImage(named: "bus3")!, UIImage(named: "suitcase1")!]
     let user = Auth.auth().currentUser
     
     override func viewDidLoad() {
         super.viewDidLoad()
-print("?????????????????????? ")
         
-        print(Auth.auth().currentUser?.displayName)
-        // Do any additional setup after loading the view.
+        if UserDefaults.standard.bool(forKey: "tips") == true {
+                tipsBtn.isHidden = false
+            } else {
+                tipsBtn.isHidden = true
+            }
         
         saveEmailBtn.layer.cornerRadius = 15.0
         savePasswordBtn.layer.cornerRadius = 15.0
@@ -39,6 +43,12 @@ print("?????????????????????? ")
     }
     
 
+    @IBAction func tipsTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Tip!", message: "Trying to change your email or password when logged in with your Apple ID is redundant. Only use these features for your email log in details.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
     @IBAction func changeEmailSave(_ sender: UIButton) {
         print("TAPED EMAIL ")
         if currentEmailTF.text! == user?.email {

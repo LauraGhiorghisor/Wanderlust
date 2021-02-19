@@ -17,6 +17,11 @@ class SettingsCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        if  UserDefaults.standard.bool(forKey: "tips") == true {
+            cellSwitch.isOn = true
+        } else {
+            cellSwitch.isOn = false
+        }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -24,5 +29,15 @@ class SettingsCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    @IBAction func switchTapped(_ sender: UISwitch) {
+        
+        if sender.isOn {
+            UserDefaults.standard.setValue(true, forKey: "tips")
+        } else {
+            UserDefaults.standard.setValue(false, forKey: "tips")
+        }
+    }
+    
     
 }

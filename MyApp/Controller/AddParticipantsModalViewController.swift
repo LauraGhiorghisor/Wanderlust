@@ -69,14 +69,14 @@ class AddParticipantsModalViewController: UIViewController {
         
         db.collection("trips").document(selectedTrip!)
             .addSnapshotListener { documentSnapshot, error in
-              guard let document = documentSnapshot else {
-                print("Error fetching document: \(error!)")
-                return
-              }
-              guard let data = document.data() else {
-                print("Document data was empty.")
-                return
-              }
+                guard let document = documentSnapshot else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                guard let data = document.data() else {
+                    print("Document data was empty.")
+                    return
+                }
                 
                 if let part = data["participantsEmailsArray"] as?  Array<String>, let number = data["noParticipants"] as? Int {
                     self.participants = part
@@ -84,19 +84,13 @@ class AddParticipantsModalViewController: UIViewController {
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                         if self.initialSet == false {
-                        self.initialNumberOfParticipants = number
+                            self.initialNumberOfParticipants = number
                             self.initialSet = true
                         }
                     }
-    }
-    
+                }
+                
             }
-                    
-           
-                    
-        
-        print("ENDING LOAD")
-        print(initialNumberOfParticipants)
     }
     
     @IBAction func submit(_ sender: UIButton) {
@@ -109,7 +103,7 @@ class AddParticipantsModalViewController: UIViewController {
             if let document = document, document.exists {
                 if let data = document.data() {
                     if  let name = data["name"] as? String, let bgImage = data["bgImage"] as? String, let color = data["color"] as? String, let status = data["status"] as? String, let leader = data["leader"] as? String {
-              
+                        
                         for invitee in invitees {
                             print("invitee for ")
                             print(invitee)

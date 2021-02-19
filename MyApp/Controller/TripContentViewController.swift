@@ -97,11 +97,9 @@ class TripContentViewController: UIViewController {
     
     
     @objc func fireTimer() {
-        //        print(timerDate)
+        
         let currentDate = Date()
         let elapsedTime = timerDate!.timeIntervalSince(currentDate)
-        // must compute day hours etc
-        //        print(elapsedTime/3600/24)
         var labelEnding = ""
         if currentTrip?.status == K.status.votingOpen {
             labelEnding = "vote"
@@ -109,7 +107,7 @@ class TripContentViewController: UIViewController {
             labelEnding = "submit proposals"
         }
         timerLabel.text = "You have \(Int(ceil(elapsedTime/3600/24))) days left to \(labelEnding)"
-        // run calculate method when interval runs out
+        // Run calculate method when interval runs out
         if elapsedTime <= 0 {
             calculate(calculateBtn)
         }
@@ -139,15 +137,13 @@ class TripContentViewController: UIViewController {
                 var alreadyVoted: Bool = false
                 
                 
-                // SETS up the current trip and the calculate buttons, as well as the timer
+                // Sets up the current trip and the calculate buttons, as well as the timer
                 if let name = data["name"] as? String, let bgImage = data["bgImage"] as? String, let color = data["color"] as? String,  let status = data["status"] as? String, let leader = data["leader"] as? String {
                     if let finalImage = UIImage(named: bgImage), let finalColor = UIColor(named: color), let p = data["noParticipants"] as? Int {
                         DispatchQueue.main.async {
                             self.currentTrip = Trip(id: document.documentID, title: name, bgImage: finalImage, color: finalColor, status: status, leader: leader)
                             self.noParticipants = p
                             
-                            
-                            // MUST CHECK WITH DIFFERENT LOGIN
                             if self.currentTrip?.leader != user {
                                 print("NOT THE SAME PERSON LEADER AND CURRENT")
                                 self.calculateBtn.isEnabled = false
@@ -172,7 +168,7 @@ class TripContentViewController: UIViewController {
                                 }
                                 self.calculateBtn.setTitle("Calculate", for: .normal)
                             }
-                            print(self.timerDate)
+                            
                         }
                     }
                 }
@@ -273,35 +269,13 @@ class TripContentViewController: UIViewController {
     
     
     @IBAction func calculate(_ sender: UIButton) {
-        
-        
-        
-        
         if currentTrip?.status == K.status.votingOpen{
-            
-            // !!!!!!check that it works with no voted
             currentTrip?.status = K.status.votingClosed
             self.calculateWriteToDB()
-            
-            
         }
         
         else if currentTrip?.status == K.status.brainstormingOpen {
-            print("voting open")
             
-            
-            // If there are no proposals, go straight to voting closed & give the trip automatic data
-            // must check if there is anything to actually write to db
-            
-            var noProposals = false
-            for section in sections {
-                if section.cellData.count == 0 {
-                    // check per section
-                    // if no proposals.... do default?
-                    
-                    noProposals = true
-                }
-            }
             // Calculate button set up
             currentTrip?.status = K.status.votingOpen
             calculateBtn.setTitle("Calculate", for: .normal)
@@ -348,8 +322,6 @@ class TripContentViewController: UIViewController {
     
     
     func calculateWriteToDB() {
-        print("i am now writing to db")
-        
         let sfReference = db.collection("trips").document(selectedTrip!)
         
         db.runTransaction({ (transaction, errorPointer) -> Any? in
@@ -380,7 +352,7 @@ class TripContentViewController: UIViewController {
             if let locations = data["locations"] as? Array<Any> {
                 for location in locations {
                     if let l = location as? Dictionary<String, Any> {
-                        var locationVotes = l["votes"] as! Int
+                        let locationVotes = l["votes"] as! Int
                         if locationVotes > maxLocationVotes {
                             maxLocationVotes = locationVotes
                             finalLocation = l["name"] as! String
@@ -397,7 +369,7 @@ class TripContentViewController: UIViewController {
             if let tunes = data["tune"] as? Array<Any> {
                 for tune in tunes {
                     if let t = tune as? Dictionary<String, Any> {
-                        var tuneVotes = t["votes"] as! Int
+                        let tuneVotes = t["votes"] as! Int
                         if tuneVotes > maxTuneVotes {
                             maxTuneVotes = tuneVotes
                             finalTune = t["name"] as! String
@@ -414,7 +386,7 @@ class TripContentViewController: UIViewController {
             if let startDates = data["startDate"] as? Array<Any> {
                 for date in startDates {
                     if let d = date as? Dictionary<String, Any> {
-                        var startDateVotes = d["votes"] as! Int
+                        let startDateVotes = d["votes"] as! Int
                         if startDateVotes > maxStartDateVotes {
                             maxStartDateVotes = startDateVotes
                             finalStartDate = d["date"] as? Timestamp
@@ -426,12 +398,12 @@ class TripContentViewController: UIViewController {
             }
             
             var finalEndDate: Timestamp?
-            var maxEndDateVotes = 0
+            let maxEndDateVotes = 0
             
             if let endDates = data["endDate"] as? Array<Any> {
                 for date in endDates {
                     if let d = date as? Dictionary<String, Any> {
-                        var endDateVotes = d["votes"] as! Int
+                        let endDateVotes = d["votes"] as! Int
                         if endDateVotes > maxEndDateVotes {
                             maxStartDateVotes = endDateVotes
                             finalEndDate = d["date"] as? Timestamp
@@ -443,8 +415,8 @@ class TripContentViewController: UIViewController {
             }
             
             
-            transaction.updateData(["votedLocation": finalLocation, "votedTune": finalTune, "votedStartDate": finalStartDate, "votedEndDate": finalEndDate, "status": K.status.votingClosed], forDocument: sfReference)
-            return [finalLocation, finalTune, finalStartDate, finalEndDate]
+            transaction.updateData(["votedLocation": finalLocation, "votedTune": finalTune, "votedStartDate": finalStartDate as Any, "votedEndDate": finalEndDate as Any, "status": K.status.votingClosed], forDocument: sfReference)
+            return [finalLocation, finalTune, finalStartDate as Any, finalEndDate as Any]
             
         }) { (object, error) in
             if let error = error {
@@ -505,16 +477,16 @@ extension TripContentViewController: UITableViewDataSource {
                 return sections[section].cellData.count + 1
             }
             else {
-//                if section == 0 {
+                //                if section == 0 {
                 // voring open
                 if sections[section].cellData.count == 0 {
                     return sections[section].cellData.count + 1
                 } else {
-                return sections[section].cellData.count
+                    return sections[section].cellData.count
                 }
-//                } else {
-//                    return sections[section].cellData.count
-//                }
+                //                } else {
+                //                    return sections[section].cellData.count
+                //                }
             }
         }
     }
@@ -536,10 +508,10 @@ extension TripContentViewController: UITableViewDataSource {
                     let cell = tableView.dequeueReusableCell(withIdentifier: K.tripContentCellIdentifier, for: indexPath) as! TripContentShowCell
                     let data = TripCell(itemTitle: nil, itemContent: "This item has no proposals.", itemImage: "mappin.slash", stats: 0, alreadyVoted: true)
                     cell.itemImage.image = UIImage(systemName: data.itemImage ?? "person" )
-//                    cell.itemImage.tintColor = UIColor(named: K.CorporateColours.brightOrange)
-//                    cell.itemContentLabel.textColor = UIColor(named: K.CorporateColours.brightOrange)
+                    //                    cell.itemImage.tintColor = UIColor(named: K.CorporateColours.brightOrange)
+                    //                    cell.itemContentLabel.textColor = UIColor(named: K.CorporateColours.brightOrange)
                     cell.itemContentLabel.text = "\(data.itemContent ?? "")"
-                   
+                    
                     cell.selectionStyle = .none
                     cell.statsLabel.isHidden = true
                     cell.voteBtn.isHidden = true
@@ -600,28 +572,28 @@ extension TripContentViewController: UITableViewDataSource {
                 }
                 else {
                     // there are rows
-                let cell = tableView.dequeueReusableCell(withIdentifier: K.tripContentCellIdentifier, for: indexPath) as! TripContentShowCell
-                let data = sections[indexPath.section].cellData[indexPath.row]
-                cell.itemImage.image = UIImage(systemName: data?.itemImage ?? "person" )
-                cell.itemContentLabel.text = "\(data?.itemContent ?? "")"
-                
-                cell.selectionStyle = .none
-                if currentTrip?.status == K.status.votingOpen {
-                    cell.voteBtn.isHidden = false
-                    cell.statsLabel.isHidden = false
-                    cell.statsLabel.text = String(describing: data!.stats)+"/"+"\(String(describing: noParticipants!))"
-                    if data?.alreadyVoted == true {
-                        cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                    } else {
-                        cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
+                    let cell = tableView.dequeueReusableCell(withIdentifier: K.tripContentCellIdentifier, for: indexPath) as! TripContentShowCell
+                    let data = sections[indexPath.section].cellData[indexPath.row]
+                    cell.itemImage.image = UIImage(systemName: data?.itemImage ?? "person" )
+                    cell.itemContentLabel.text = "\(data?.itemContent ?? "")"
+                    
+                    cell.selectionStyle = .none
+                    if currentTrip?.status == K.status.votingOpen {
+                        cell.voteBtn.isHidden = false
+                        cell.statsLabel.isHidden = false
+                        cell.statsLabel.text = String(describing: data!.stats)+"/"+"\(String(describing: noParticipants!))"
+                        if data?.alreadyVoted == true {
+                            cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+                        } else {
+                            cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
+                        }
+                    } else   {
+                        cell.voteBtn.isHidden = true
+                        cell.statsLabel.isHidden = true
                     }
-                } else   {
-                    cell.voteBtn.isHidden = true
-                    cell.statsLabel.isHidden = true
+                    return cell
                 }
-                return cell
             }
-        }
         }// end section 1
         
         if indexPath.section == 2 {
@@ -646,29 +618,29 @@ extension TripContentViewController: UITableViewDataSource {
                 else {
                     // there are rows
                     
-                let cell = tableView.dequeueReusableCell(withIdentifier: K.tripContentCellIdentifier, for: indexPath) as! TripContentShowCell
-                let data = sections[indexPath.section].cellData[indexPath.row]
-                cell.itemImage.image = UIImage(systemName: data?.itemImage ?? "person" )
-                cell.itemContentLabel.text = "\(data?.itemContent ?? "")"
-                
-                cell.selectionStyle = .none
-                if currentTrip?.status == K.status.votingOpen {
-                    cell.voteBtn.isHidden = false
-                    cell.statsLabel.isHidden = false
-                    cell.statsLabel.text = String(describing: data!.stats)+"/"+"\(String(describing: noParticipants!))"
-                    if data?.alreadyVoted == true {
-                        cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                    } else {
-                        cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
+                    let cell = tableView.dequeueReusableCell(withIdentifier: K.tripContentCellIdentifier, for: indexPath) as! TripContentShowCell
+                    let data = sections[indexPath.section].cellData[indexPath.row]
+                    cell.itemImage.image = UIImage(systemName: data?.itemImage ?? "person" )
+                    cell.itemContentLabel.text = "\(data?.itemContent ?? "")"
+                    
+                    cell.selectionStyle = .none
+                    if currentTrip?.status == K.status.votingOpen {
+                        cell.voteBtn.isHidden = false
+                        cell.statsLabel.isHidden = false
+                        cell.statsLabel.text = String(describing: data!.stats)+"/"+"\(String(describing: noParticipants!))"
+                        if data?.alreadyVoted == true {
+                            cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+                        } else {
+                            cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
+                        }
+                    } else   {
+                        cell.voteBtn.isHidden = true
+                        cell.statsLabel.isHidden = true
                     }
-                } else   {
-                    cell.voteBtn.isHidden = true
-                    cell.statsLabel.isHidden = true
+                    return cell
                 }
-                return cell
             }
         }
-    }
         if indexPath.section == 3 {
             if currentTrip?.status == K.status.brainstormingOpen && indexPath.row == tableView.numberOfRows(inSection: 3) - 1 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: K.tripContentAddEndDateCellIdentifier, for: indexPath) as! TripContentAddEndDateCell
@@ -690,28 +662,28 @@ extension TripContentViewController: UITableViewDataSource {
                 }
                 else {
                     // there are rows
-                let cell = tableView.dequeueReusableCell(withIdentifier: K.tripContentCellIdentifier, for: indexPath) as! TripContentShowCell
-                let data = sections[indexPath.section].cellData[indexPath.row]
-                cell.itemImage.image = UIImage(systemName: data?.itemImage ?? "person" )
-                cell.itemContentLabel.text = "\(data?.itemContent ?? "")"
-                
-                cell.selectionStyle = .none
-                if currentTrip?.status == K.status.votingOpen {
-                    cell.voteBtn.isHidden = false
-                    cell.statsLabel.isHidden = false
-                    cell.statsLabel.text = String(describing: data!.stats)+"/"+"\(String(describing: noParticipants!))"
-                    if data?.alreadyVoted == true {
-                        cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-                    } else {
-                        cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
+                    let cell = tableView.dequeueReusableCell(withIdentifier: K.tripContentCellIdentifier, for: indexPath) as! TripContentShowCell
+                    let data = sections[indexPath.section].cellData[indexPath.row]
+                    cell.itemImage.image = UIImage(systemName: data?.itemImage ?? "person" )
+                    cell.itemContentLabel.text = "\(data?.itemContent ?? "")"
+                    
+                    cell.selectionStyle = .none
+                    if currentTrip?.status == K.status.votingOpen {
+                        cell.voteBtn.isHidden = false
+                        cell.statsLabel.isHidden = false
+                        cell.statsLabel.text = String(describing: data!.stats)+"/"+"\(String(describing: noParticipants!))"
+                        if data?.alreadyVoted == true {
+                            cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+                        } else {
+                            cell.voteBtn.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
+                        }
+                    } else   {
+                        cell.statsLabel.isHidden = true
+                        cell.voteBtn.isHidden = true
                     }
-                } else   {
-                    cell.statsLabel.isHidden = true
-                    cell.voteBtn.isHidden = true
+                    return cell
                 }
-                return cell
             }
-        }
         }
         
         if indexPath.section == 4 {

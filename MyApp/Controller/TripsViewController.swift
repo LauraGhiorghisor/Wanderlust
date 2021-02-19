@@ -212,6 +212,8 @@ extension TripsViewController: UICollectionViewDelegate {
 extension TripsViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        optionsView.isHidden = true 
         let width = view.frame.size.width - 40.0
         var height: CGFloat = 0.0
         print(view.frame.size.height)

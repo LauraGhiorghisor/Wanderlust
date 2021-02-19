@@ -23,19 +23,19 @@ class SettingsViewController: UIViewController, SKPaymentTransactionObserver {
 //
     var content = [
        
-        ["Disable Tips and Suggestions",
+        ["Enable Tips and Suggestions",
         "Terms & Conditions",
         "Report a Problem"],
        
         [ "Share App with Friends"],
         
-        ["Upgrade to premium",
-        "Restore purchases"],
+        ["Upgrade to Premium",
+        "Restore Purchases"],
         
         ["Logged in as",
         "Delete Account"]]
     
-    let sections = ["Controlls & Permissions", "Sharing", "Purchases", "User Account"]
+    let sections = ["Controls & Permissions", "Sharing", "Purchases", "User Account"]
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -222,6 +222,10 @@ extension SettingsViewController: UITableViewDelegate {
             performSegue(withIdentifier: K.settingsToTC, sender: self)
         }
         
+        //invite
+        if indexPath.section == 1 && indexPath.row == 0 {
+            performSegue(withIdentifier: K.settingsToInvite, sender: self)
+        }
     }
 
 

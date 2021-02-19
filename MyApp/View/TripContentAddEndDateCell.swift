@@ -87,7 +87,7 @@ extension TripContentAddEndDateCell: UITextFieldDelegate {
                 "endDate": FieldValue.arrayUnion(
                     [
                         [
-                            "date" : endDate,
+                            "date" : endDate as Any,
                             "votes": 0,
                             "voters": []
                         ]

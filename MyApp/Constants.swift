@@ -43,7 +43,7 @@ struct K {
     static let contentToAddPeopleModal = "ContentToAddPeopleModal"
     static let votedToAddPeopleModal = "VotedToAddPeopleModal"
     static let votedToUpgradeModal = "VotedToUpgradeModal"
-    
+    static let settingsToInvite = "SettingsToInvite"
     //settings
     static let settingsToReportAProblem = "SettingsToReportAProblem"
     static let settingsToTC = "SettingsToTC"
@@ -98,6 +98,11 @@ struct K {
     static let tripEventNibName = "TripEventCell"
     static let tripEventCellIdentifier = "TripEventCellIdentifier"
     
+    
+    // invites cell
+    
+    static let inviteCellNibName = "InviteCell"
+    static let inviteCellIdentifier = "InviteCellIdentifier"
     //colours
     struct CorporateColours {
         static let orange = "BrandOrange"
